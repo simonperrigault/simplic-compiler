@@ -1,0 +1,5 @@
+if i then
+    if j then
+        variable = 5.0
+    fi
+fi
