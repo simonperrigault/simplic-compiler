@@ -12,6 +12,10 @@ public class ParseTests {
 	/** Directory where the test input files are stored. */
 	private static final File TEST_DIRECTORY = new File("testfiles");
 
+	@Test public void smallestTest() {
+		Util.testValidSyntax(TEST_DIRECTORY, "smallest.in");
+	}
+
 	@Test public void assignmentTest() {
 		Util.testValidSyntax(TEST_DIRECTORY, "assignment.in");
 	}
@@ -34,5 +38,13 @@ public class ParseTests {
 
 	@Test public void errAssignmentTest() {
 		Util.testSyntaxError(TEST_DIRECTORY, "errAssignment.in");
+	}
+
+	@Test public void errScanningTest() {
+		Util.testSyntaxError(TEST_DIRECTORY, "errScanning.in");
+	}
+
+	@Test public void errParsingTest() {
+		Util.testSyntaxError(TEST_DIRECTORY, "errParsing.in");
 	}
 }
