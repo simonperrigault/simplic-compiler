@@ -1,0 +1,4 @@
+if not 5.0
+then
+    variable = 5.0
+fi

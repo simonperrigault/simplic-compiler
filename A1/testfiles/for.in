@@ -1,0 +1,4 @@
+for variable = 3.0 until 5.0
+do
+    var = 6.0
+od

@@ -1,0 +1,22 @@
+variable = 3.0
+var = variable
+var = not var
+
+if variable then
+    variable = 6.0
+fi
+if not variable then
+    variable = 7.0
+fi
+
+for i = 1.0 until not 5.0 do
+    j = 3.0
+od
+
+for i = 1.0 until 7.0 do
+    if variable then
+        if i then
+            k = 0.0
+        fi
+    fi
+od
