@@ -16,6 +16,10 @@ public class ParseTests {
 		Util.testValidSyntax(TEST_DIRECTORY, "assignment.in");
 	}
 
+	@Test public void assignmentIntTest() {
+		Util.testValidSyntax(TEST_DIRECTORY, "assignmentInt.in");
+	}
+
 	@Test public void not_assignTest() {
 		Util.testValidSyntax(TEST_DIRECTORY, "not_assign.in");
 	}
