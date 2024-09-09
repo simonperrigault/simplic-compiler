@@ -28,11 +28,23 @@ public class Parser extends RDPTemplate {
     }
 
     protected void forStmt() {
-
+        accept(Terminals.FOR);
+        accept(Terminals.ID);
+        accept(Terminals.ASSIGN);
+        expr();
+        accept(Terminals.UNTIL);
+        expr();
+        accept(Terminals.DO);
+        stmt();
+        accept(Terminals.OD);
     }
 
     protected void ifStmt() {
-
+        accept(Terminals.IF);
+        expr();
+        accept(Terminals.THEN);
+        stmt();
+        accept(Terminals.FI);
     }
 
     protected void assignment() {
