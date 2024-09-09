@@ -5,11 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
-import lang.ast.LangParser;
-import lang.ast.LangParser.SyntaxError;
 import lang.ast.LangScanner;
 
-import lang.RecursiveDescentParser;
+import lang.Parser;
 
 public class RecursiveDescentCompiler {
 	public static void main(String args[]) {
@@ -27,16 +25,13 @@ public class RecursiveDescentCompiler {
 
 	private static void parse(Reader reader) {
 		LangScanner scanner = new LangScanner(reader);
-		LangParser parser = new RecursiveDescentParser();
+		Parser parser = new Parser();
 
 		try {
 			parser.parse(scanner);
 			System.out.println("Valid syntax");
-		} catch (SyntaxError | beaver.Parser.Exception e) {
+		} catch (RuntimeException e) {
 			System.err.println("Syntax error: " + e.getMessage());
-			System.exit(1);
-		} catch (IOException e) {
-			e.printStackTrace();
 			System.exit(1);
 		}
 	}
