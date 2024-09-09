@@ -8,7 +8,7 @@ import static lang.ast.LangParser.Terminals.*;
  * Abstract base class for recursive decent parsers.
  * You should implement the parseProgram() method to parse a MiniS program.
  */
-public class RecursiveDescentParser {
+public abstract class RDPTemplate {
     private LangScanner scanner;
     private beaver.Symbol currentToken;
 
@@ -19,9 +19,7 @@ public class RecursiveDescentParser {
         accept(EOF); // Ensure all input is processed.
     }
 
-    protected void parseProgram() {
-        
-    }
+    protected abstract void parseProgram() ;
 
     /** Returns the current token without proceeding to the next. */
     protected int peek() {
