@@ -1,1 +1,8 @@
-Program ::= <ID>;
+Program ::= FuncDecl*;
+FuncDecl ::= FuncName:IdDecl FuncParam* Block;
+FuncParam ::= ParamName:IdDecl;
+
+IdUse ::= <ID>;
+IdDecl ::= <ID>;
+
+Block;

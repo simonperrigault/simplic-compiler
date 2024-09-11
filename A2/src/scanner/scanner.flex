@@ -28,7 +28,8 @@ import lang.ast.LangParser.SyntaxError;
 
 // macros
 WhiteSpace = [ ] | \t | \f | \n | \r
-ID = [a-zA-Z]+
+ID = [a-zA-Z][a-zA-Z0-9_]*
+Numeral = [1-9][0-9]*
 
 %%
 
@@ -36,8 +37,33 @@ ID = [a-zA-Z]+
 {WhiteSpace}  { }
 
 // token definitions
-{ID}          { return sym(Terminals.ID); }
-<<EOF>>       { return sym(Terminals.EOF); }
+"while"     { return sym(Terminals.WHILE); }
+"if"        { return sym(Terminals.IF); }
+"else"      { return sym(Terminals.ELSE); }
+"int"       { return sym(Terminals.INT); }
+"return"    { return sym(Terminals.RETURN); }
+"*"         { return sym(Terminals.MUL); }
+"/"         { return sym(Terminals.DIV); }
+"%"         { return sym(Terminals.MOD); }
+"+"         { return sym(Terminals.ADD); }
+"-"         { return sym(Terminals.SUB); }
+"=="        { return sym(Terminals.EQ); }
+"!="        { return sym(Terminals.NEQ); }
+"<="        { return sym(Terminals.LE); }
+">="        { return sym(Terminals.GE); }
+"<"         { return sym(Terminals.LT); }
+">"         { return sym(Terminals.GT); }
+"="         { return sym(Terminals.ASSIGN); }
+"("         { return sym(Terminals.LPAR); }
+")"         { return sym(Terminals.RPAR); }
+"{"         { return sym(Terminals.LBRACK); }
+"}"         { return sym(Terminals.RBRACK); }
+";"         { return sym(Terminals.SEMICOLON); }
+","         { return sym(Terminals.COMMA); }
+{Numeral}     { return sym(Terminals.NUMERAL); }
+"//"        { return sym(Terminals.COMMENT); }
+{ID}        { return sym(Terminals.ID); }
+<<EOF>>     { return sym(Terminals.EOF); }
 
 /* error fallback */
-[^]           { throw new SyntaxError("Illegal character <"+yytext()+">"); }
+[^]         { throw new SyntaxError("Illegal character <"+yytext()+">"); }

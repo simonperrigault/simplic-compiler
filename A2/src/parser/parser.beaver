@@ -9,10 +9,36 @@
 	}
 :};
 
-%terminals ID;
+%terminals ID, WHILE, IF, ELSE, INT, RETURN, 
+		   MUL, DIV, MOD, ADD, SUB, EQ, NEQ,
+		   LE, LT, GE, GT, ASSIGN, LPAR, RPAR,
+		   LBRACK, RBRACK, SEMICOLON, COMMA, NUMERAL,
+		   COMMENT;
 
 %typeof program = "Program";
+%typeof funcDecl = "FuncDecl";
+%typeof funcDeclList = "List";
+%typeof funcParam = "FuncParam";
+%typeof funcParamList = "List";
+%typeof type = "Type";
+%typeof block = "Block";
+%typeof varDecl = "VarDecl";
+%typeof id_use = "IdUse";
+%typeof id_decl = "IdDecl";
 
 %goal program;
 
-program = ID.id {: return new Program(id); :} ;
+program = funcDeclList.a {: return new Program(a); :};
+funcDeclList = funcDecl.a {: return new List().add(a); :}
+						| funcDeclList.a funcDecl.b {: return a.add(b); :}
+						;
+funcDecl = INT id_decl.id LPAR funcParamList.l RPAR LBRACK block.b RBRACK {: return new FuncDecl(id, l, b); :};
+funcParamList = /* epsilon */ {: return new List(); :}
+						| funcParam.a {: return new List().add(a); :}
+						| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
+						;
+funcParam = INT id_decl.id {: return new FuncParam(id); :} ;
+block = ;
+
+id_use = ID.id {: return new IdUse(id); :};
+id_decl = ID.id {: return new IdDecl(id); :};
