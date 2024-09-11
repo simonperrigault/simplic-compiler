@@ -1,0 +1,12 @@
+Program
+  List
+    FuncDecl
+      IdDecl ID="main"
+      List
+        FuncParam
+          IdDecl ID="param1"
+      List
+    FuncDecl
+      IdDecl ID="main_2"
+      List
+      List

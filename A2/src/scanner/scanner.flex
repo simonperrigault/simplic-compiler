@@ -53,14 +53,14 @@ Numeral = [1-9][0-9]*
 ">="        { return sym(Terminals.GE); }
 "<"         { return sym(Terminals.LT); }
 ">"         { return sym(Terminals.GT); }
-"="         { return sym(Terminals.ASSIGN); }
 "("         { return sym(Terminals.LPAR); }
 ")"         { return sym(Terminals.RPAR); }
 "{"         { return sym(Terminals.LBRACK); }
 "}"         { return sym(Terminals.RBRACK); }
 ";"         { return sym(Terminals.SEMICOLON); }
 ","         { return sym(Terminals.COMMA); }
-{Numeral}     { return sym(Terminals.NUMERAL); }
+"="         { return sym(Terminals.ASSIGN); }
+{Numeral}   { return sym(Terminals.NUMERAL); }
 "//"        { return sym(Terminals.COMMENT); }
 {ID}        { return sym(Terminals.ID); }
 <<EOF>>     { return sym(Terminals.EOF); }

@@ -21,24 +21,44 @@
 %typeof funcParam = "FuncParam";
 %typeof funcParamList = "List";
 %typeof type = "Type";
-%typeof block = "Block";
 %typeof varDecl = "VarDecl";
 %typeof id_use = "IdUse";
 %typeof id_decl = "IdDecl";
+%typeof stmt = "Stmt";
+%typeof stmtList = "List";
+%typeof decl = "Decl";
+%typeof assignment = "Assignment";
+%typeof expr = "Expr";
+%typeof numeral = "Numeral";
 
 %goal program;
 
 program = funcDeclList.a {: return new Program(a); :};
 funcDeclList = funcDecl.a {: return new List().add(a); :}
-						| funcDeclList.a funcDecl.b {: return a.add(b); :}
-						;
-funcDecl = INT id_decl.id LPAR funcParamList.l RPAR LBRACK block.b RBRACK {: return new FuncDecl(id, l, b); :};
+				| funcDeclList.a funcDecl.b {: return a.add(b); :}
+				;
+funcDecl = INT id_decl.id LPAR funcParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :};
 funcParamList = /* epsilon */ {: return new List(); :}
-						| funcParam.a {: return new List().add(a); :}
-						| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
-						;
+				| funcParam.a {: return new List().add(a); :}
+				| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
+				;
 funcParam = INT id_decl.id {: return new FuncParam(id); :} ;
-block = ;
 
+stmtList = /* epsilon */ {: return new List(); :}
+			| stmtList.a stmt.b {: return a.add(b); :}
+			;
+stmt = decl
+		| assignment
+		;
+decl = INT id_decl.id SEMICOLON {: return new Decl(id, new Opt()); :}
+		| INT id_decl.id ASSIGN expr.e SEMICOLON {: return new Decl(id, new Opt(e)); :}
+		;
+assignment = id_decl.id ASSIGN expr.e SEMICOLON {: return new Assignment(id, e); :};
+
+expr = id_use
+		| numeral
+		;
+
+numeral = NUMERAL.n {: return new Numeral(n); :};
 id_use = ID.id {: return new IdUse(id); :};
 id_decl = ID.id {: return new IdDecl(id); :};

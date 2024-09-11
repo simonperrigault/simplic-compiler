@@ -1,8 +1,13 @@
 Program ::= FuncDecl*;
-FuncDecl ::= FuncName:IdDecl FuncParam* Block;
+FuncDecl ::= FuncName:IdDecl ParamList:FuncParam* StmtList:Stmt*;
 FuncParam ::= ParamName:IdDecl;
 
-IdUse ::= <ID>;
 IdDecl ::= <ID>;
 
-Block;
+abstract Stmt;
+Decl : Stmt ::= IdDecl [Expr];
+Assignment : Stmt ::= IdDecl Expr;
+
+abstract Expr;
+Numeral : Expr ::= <NUMERAL>;
+IdUse : Expr ::= <ID>;
