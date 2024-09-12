@@ -26,7 +26,6 @@
 %typeof id_decl = "IdDecl";
 %typeof stmt = "Stmt";
 %typeof stmtList = "List";
-%typeof noReturnStmt = "NoReturnStmt";
 %typeof decl = "Decl";
 %typeof assignment = "Assignment";
 %typeof returnStmt = "ReturnStmt";
@@ -48,8 +47,8 @@ program = funcDeclList.a {: return new Program(a); :};
 funcDeclList = funcDecl.a {: return new List().add(a); :}
 			| funcDeclList.a funcDecl.b {: return a.add(b); :}
 			;
-funcDecl = INT id_decl.id LPAR funcParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s, new Opt()); :}
-		| INT id_decl.id LPAR funcParamList.l RPAR LBRACK stmtList.s returnStmt.r RBRACK {: return new FuncDecl(id, l, s, new Opt(r)); :}
+funcDecl = INT id_decl.id LPAR funcParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
+		| INT id_decl.id LPAR funcParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
 		;
 funcParamList = /* epsilon */ {: return new List(); :}
 				| funcParam.a {: return new List().add(a); :}
@@ -58,15 +57,13 @@ funcParamList = /* epsilon */ {: return new List(); :}
 funcParam = INT id_decl.id {: return new FuncParam(id); :} ;
 
 stmtList = /* epsilon */ {: return new List(); :}
-			| stmtList.a noReturnStmt.b {: return a.add(b); :}
+			| stmtList.a stmt.b {: return a.add(b); :}
 			;
-stmt = noReturnStmt
+stmt = decl
+		| assignment
 		| returnStmt
 		;
 returnStmt = RETURN expr.e SEMICOLON {: return new ReturnStmt(e); :};
-noReturnStmt = decl
-			| assignment
-			;
 decl = INT id_decl.id SEMICOLON {: return new Decl(id, new Opt()); :}
 		| INT id_decl.id ASSIGN expr.e SEMICOLON {: return new Decl(id, new Opt(e)); :}
 		;

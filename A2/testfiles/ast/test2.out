@@ -17,4 +17,3 @@ Program
         Assignment
           IdDecl ID="x"
           IdUse ID="y"
-      Opt

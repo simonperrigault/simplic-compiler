@@ -6,11 +6,9 @@ Program
         FuncParam
           IdDecl ID="param1"
       List
-      Opt
     FuncDecl
       IdDecl ID="main_2"
       List
       List
-      Opt
         ReturnStmt
           Numeral NUMERAL="0"
