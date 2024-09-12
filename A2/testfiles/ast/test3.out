@@ -52,3 +52,4 @@ Program
               AddExpr
                 IdUse ID="x"
                 IdUse ID="y"
+      Opt

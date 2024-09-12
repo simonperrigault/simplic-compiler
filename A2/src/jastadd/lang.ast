@@ -1,12 +1,14 @@
 Program ::= FuncDecl*;
-FuncDecl ::= FuncName:IdDecl ParamList:FuncParam* StmtList:Stmt*;
+FuncDecl ::= FuncName:IdDecl ParamList:FuncParam* StmtList:NoReturnStmt* [ReturnStmt];
 FuncParam ::= ParamName:IdDecl;
 
 IdDecl ::= <ID>;
 
 abstract Stmt;
-Decl : Stmt ::= IdDecl [Expr];
-Assignment : Stmt ::= IdDecl Expr;
+ReturnStmt : Stmt ::= Expr;
+abstract NoReturnStmt;
+Decl : NoReturnStmt ::= IdDecl [Expr];
+Assignment : NoReturnStmt ::= IdDecl Expr;
 
 abstract Expr;
 LtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
