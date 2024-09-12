@@ -9,5 +9,9 @@ Decl : Stmt ::= IdDecl [Expr];
 Assignment : Stmt ::= IdDecl Expr;
 
 abstract Expr;
+AddExpr : Expr ::= Left:Expr Right:Expr;
+MulExpr : Expr ::= Left:Expr Right:Expr;
+OppExpr : Expr ::= Expr;
+PrimaryExpr : Expr ::= Expr;
 Numeral : Expr ::= <NUMERAL>;
 IdUse : Expr ::= <ID>;

@@ -30,6 +30,10 @@
 %typeof assignment = "Assignment";
 %typeof expr = "Expr";
 %typeof numeral = "Numeral";
+%typeof mulExpr = "Expr";
+%typeof addExpr = "Expr";
+%typeof primaryExpr = "Expr";
+%typeof oppExpr = "Expr";
 
 %goal program;
 
@@ -55,9 +59,21 @@ decl = INT id_decl.id SEMICOLON {: return new Decl(id, new Opt()); :}
 		;
 assignment = id_decl.id ASSIGN expr.e SEMICOLON {: return new Assignment(id, e); :};
 
-expr = id_use
-		| numeral
+expr = addExpr
 		;
+addExpr = mulExpr.m
+		| addExpr.a ADD mulExpr.m {: return new AddExpr(a, m); :}
+		;
+mulExpr = oppExpr
+		| mulExpr.m MUL oppExpr.o  {: return new MulExpr(m, o); :}
+		;
+oppExpr = primaryExpr
+		| SUB primaryExpr.p {: return new OppExpr(p); :}
+		;
+primaryExpr = id_use
+			| numeral
+			| LPAR expr.e RPAR {: return new PrimaryExpr(e); :}
+			;
 
 numeral = NUMERAL.n {: return new Numeral(n); :};
 id_use = ID.id {: return new IdUse(id); :};
