@@ -9,9 +9,20 @@ Decl : Stmt ::= IdDecl [Expr];
 Assignment : Stmt ::= IdDecl Expr;
 
 abstract Expr;
-AddExpr : Expr ::= Left:Expr Right:Expr;
-MulExpr : Expr ::= Left:Expr Right:Expr;
-OppExpr : Expr ::= Expr;
-PrimaryExpr : Expr ::= Expr;
-Numeral : Expr ::= <NUMERAL>;
-IdUse : Expr ::= <ID>;
+LtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+LeExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+GtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+GeExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+EqExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+NeqExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+
+abstract ArithExpr : Expr;
+AddExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+SubExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+MulExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+DivExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+ModExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+OppExpr : ArithExpr ::= ArithExpr;
+PrimaryExpr : ArithExpr ::= Expr;
+Numeral : ArithExpr ::= <NUMERAL>;
+IdUse : ArithExpr ::= <ID>;

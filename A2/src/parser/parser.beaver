@@ -30,10 +30,15 @@
 %typeof assignment = "Assignment";
 %typeof expr = "Expr";
 %typeof numeral = "Numeral";
-%typeof mulExpr = "Expr";
-%typeof addExpr = "Expr";
-%typeof primaryExpr = "Expr";
-%typeof oppExpr = "Expr";
+%typeof arithExpr = "ArithExpr";
+%typeof addExpr = "ArithExpr";
+%typeof subExpr = "ArithExpr";
+%typeof mulExpr = "ArithExpr";
+%typeof divExpr = "ArithExpr";
+%typeof modExpr = "ArithExpr";
+%typeof oppExpr = "ArithExpr";
+%typeof primaryExpr = "ArithExpr";
+%typeof compExpr = "Expr";
 
 %goal program;
 
@@ -59,13 +64,26 @@ decl = INT id_decl.id SEMICOLON {: return new Decl(id, new Opt()); :}
 		;
 assignment = id_decl.id ASSIGN expr.e SEMICOLON {: return new Assignment(id, e); :};
 
-expr = addExpr
+expr = compExpr
+		| arithExpr
+		;
+compExpr = arithExpr.a LE arithExpr.b {: return new LeExpr(a,b); :}
+		| arithExpr.a LT arithExpr.b {: return new LtExpr(a,b); :}
+		| arithExpr.a GE arithExpr.b {: return new GeExpr(a,b); :}
+		| arithExpr.a GT arithExpr.b {: return new GtExpr(a,b); :}
+		| arithExpr.a EQ arithExpr.b {: return new EqExpr(a,b); :}
+		| arithExpr.a NEQ arithExpr.b {: return new NeqExpr(a,b); :}
+		;
+arithExpr = addExpr
 		;
 addExpr = mulExpr.m
 		| addExpr.a ADD mulExpr.m {: return new AddExpr(a, m); :}
+		| addExpr.a SUB mulExpr.m {: return new SubExpr(a, m); :}
 		;
 mulExpr = oppExpr
 		| mulExpr.m MUL oppExpr.o  {: return new MulExpr(m, o); :}
+		| mulExpr.m DIV oppExpr.o  {: return new DivExpr(m, o); :}
+		| mulExpr.m MOD oppExpr.o  {: return new ModExpr(m, o); :}
 		;
 oppExpr = primaryExpr
 		| SUB primaryExpr.p {: return new OppExpr(p); :}

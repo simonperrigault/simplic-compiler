@@ -21,6 +21,10 @@ public class ParseTests {
 	public void correct3() {
 		Util.testValidSyntax(TEST_DIRECTORY, "correct3.in");
 	}
+	@Test
+	public void correct4() {
+		Util.testValidSyntax(TEST_DIRECTORY, "correct4.in");
+	}
 
 	@Test
 	public void error1() {
@@ -41,5 +45,9 @@ public class ParseTests {
 	@Test
 	public void error5() {
 		Util.testSyntaxError(TEST_DIRECTORY, "error5.in");
+	}
+	@Test
+	public void error6() {
+		Util.testSyntaxError(TEST_DIRECTORY, "error6.in");
 	}
 }
