@@ -18,7 +18,9 @@
 %typeof program = "Program";
 %typeof funcDecl = "FuncDecl";
 %typeof funcDeclList = "List";
+%typeof funcDeclParam = "FuncDeclParam";
 %typeof funcParam = "FuncParam";
+%typeof funcDeclParamList = "List";
 %typeof funcParamList = "List";
 %typeof type = "Type";
 %typeof varDecl = "VarDecl";
@@ -29,6 +31,7 @@
 %typeof decl = "Decl";
 %typeof assignment = "Assignment";
 %typeof returnStmt = "ReturnStmt";
+%typeof funcCallStmt = "FuncCallStmt";
 %typeof expr = "Expr";
 %typeof numeral = "Numeral";
 %typeof arithExpr = "ArithExpr";
@@ -39,6 +42,7 @@
 %typeof modExpr = "ArithExpr";
 %typeof oppExpr = "ArithExpr";
 %typeof primaryExpr = "ArithExpr";
+%typeof funcCall = "FuncCall";
 %typeof compExpr = "Expr";
 
 %goal program;
@@ -47,14 +51,19 @@ program = funcDeclList.a {: return new Program(a); :};
 funcDeclList = funcDecl.a {: return new List().add(a); :}
 			| funcDeclList.a funcDecl.b {: return a.add(b); :}
 			;
-funcDecl = INT id_decl.id LPAR funcParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
-		| INT id_decl.id LPAR funcParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
+funcDecl = INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
+		| INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
 		;
+funcDeclParamList = /* epsilon */ {: return new List(); :}
+				| funcDeclParam.a {: return new List().add(a); :}
+				| funcDeclParamList.a COMMA funcDeclParam.b {: return a.add(b); :}
+				;
+funcDeclParam = INT id_decl.id {: return new FuncDeclParam(id); :} ;
 funcParamList = /* epsilon */ {: return new List(); :}
 				| funcParam.a {: return new List().add(a); :}
 				| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
 				;
-funcParam = INT id_decl.id {: return new FuncParam(id); :} ;
+funcParam = id_use.id {: return new FuncParam(id); :} ;
 
 stmtList = /* epsilon */ {: return new List(); :}
 			| stmtList.a stmt.b {: return a.add(b); :}
@@ -62,8 +71,10 @@ stmtList = /* epsilon */ {: return new List(); :}
 stmt = decl
 		| assignment
 		| returnStmt
+		| funcCallStmt
 		;
 returnStmt = RETURN expr.e SEMICOLON {: return new ReturnStmt(e); :};
+funcCallStmt = funcCall.f SEMICOLON {: return new FuncCallStmt(f); :};
 decl = INT id_decl.id SEMICOLON {: return new Decl(id, new Opt()); :}
 		| INT id_decl.id ASSIGN expr.e SEMICOLON {: return new Decl(id, new Opt(e)); :}
 		;
@@ -95,9 +106,11 @@ oppExpr = primaryExpr
 		;
 primaryExpr = id_use
 			| numeral
+			| funcCall
 			| LPAR expr.e RPAR {: return new PrimaryExpr(e); :}
 			;
 
+funcCall = id_use.id LPAR funcParamList.l RPAR {: return new FuncCall(id, l); :};
 numeral = NUMERAL.n {: return new Numeral(n); :};
 id_use = ID.id {: return new IdUse(id); :};
 id_decl = ID.id {: return new IdDecl(id); :};

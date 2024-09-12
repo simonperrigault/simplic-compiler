@@ -3,7 +3,7 @@ Program
     FuncDecl
       IdDecl ID="main"
       List
-        FuncParam
+        FuncDeclParam
           IdDecl ID="param1"
       List
     FuncDecl

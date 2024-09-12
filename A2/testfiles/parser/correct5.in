@@ -1,0 +1,5 @@
+int main(int paramdecl) {
+    int x = f(a, b);
+    int y = g();
+    int z = h(c);
+}
