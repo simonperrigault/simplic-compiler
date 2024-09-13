@@ -35,6 +35,8 @@ Numeral = 0|[1-9][0-9]*
 
 // discard whitespace information
 {WhiteSpace}  { }
+// comments
+"//" [^\n\r]* [\n\r]? { }
 
 // token definitions
 "while"     { return sym(Terminals.WHILE); }
@@ -61,7 +63,6 @@ Numeral = 0|[1-9][0-9]*
 ","         { return sym(Terminals.COMMA); }
 "="         { return sym(Terminals.ASSIGN); }
 {Numeral}   { return sym(Terminals.NUMERAL); }
-"//"        { return sym(Terminals.COMMENT); }
 {ID}        { return sym(Terminals.ID); }
 <<EOF>>     { return sym(Terminals.EOF); }
 

@@ -51,9 +51,7 @@ program = funcDeclList.a {: return new Program(a); :};
 funcDeclList = funcDecl.a {: return new List().add(a); :}
 			| funcDeclList.a funcDecl.b {: return a.add(b); :}
 			;
-funcDecl = INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
-		| INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
-		;
+funcDecl = INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :};
 funcDeclParamList = /* epsilon */ {: return new List(); :}
 				| funcDeclParam.a {: return new List().add(a); :}
 				| funcDeclParamList.a COMMA funcDeclParam.b {: return a.add(b); :}

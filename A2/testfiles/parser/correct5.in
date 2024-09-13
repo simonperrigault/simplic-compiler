@@ -1,5 +1,6 @@
 int main(int paramdecl) {
-    int x = f(a, b);
+    int x = f(a, b); // commentaire 2
     int y = g();
     int z = h(c);
+    read(z);
 }
