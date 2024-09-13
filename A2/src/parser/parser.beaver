@@ -52,22 +52,19 @@
 
 %goal program;
 
-program = funcDeclList.a {: return new Program(a); :};
+program = /* epsilon */ {: return new Program(new List()); :}
+		| funcDeclList.a {: return new Program(a); :};
 
 funcDeclList = funcDecl.a {: return new List().add(a); :}
 			| funcDeclList.a funcDecl.b {: return a.add(b); :}
 			;
-funcDecl = INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :};
-funcDeclParamList = /* epsilon */ {: return new List(); :}
-				| funcDeclParam.a {: return new List().add(a); :}
-				| funcDeclParamList.a COMMA funcDeclParam.b {: return a.add(b); :}
-				;
+funcDecl = INT id_decl.id LPAR RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, new List(), s); :}
+			| INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
+			;
+funcDeclParamList = funcDeclParam.a {: return new List().add(a); :}
+					| funcDeclParamList.a COMMA funcDeclParam.b {: return a.add(b); :}
+					;
 funcDeclParam = INT id_decl.id {: return new FuncDeclParam(id); :} ;
-funcParamList = /* epsilon */ {: return new List(); :}
-				| funcParam.a {: return new List().add(a); :}
-				| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
-				;
-funcParam = expr.e {: return new FuncParam(e); :};
 
 stmtList = /* epsilon */ {: return new List(); :}
 			| stmtList.a stmt.b {: return a.add(b); :}
@@ -112,7 +109,7 @@ mulExpr = oppExpr
 		| mulExpr.m MOD oppExpr.o  {: return new ModExpr(m, o); :}
 		;
 oppExpr = primaryExpr
-		| SUB primaryExpr.p {: return new OppExpr(p); :}
+		| SUB oppExpr.p {: return new OppExpr(p); :}
 		;
 primaryExpr = id_use
 			| numeral
@@ -120,7 +117,14 @@ primaryExpr = id_use
 			| LPAR expr.e RPAR {: return new PrimaryExpr(e); :}
 			;
 
-funcCall = id_use.id LPAR funcParamList.l RPAR {: return new FuncCall(id, l); :};
 numeral = NUMERAL.n {: return new Numeral(n); :};
 id_use = ID.id {: return new IdUse(id); :};
 id_decl = ID.id {: return new IdDecl(id); :};
+funcCall = id_use.id LPAR RPAR {: return new FuncCall(id, new List()); :}
+		| id_use.id LPAR funcParamList.l RPAR {: return new FuncCall(id, l); :}
+		;
+
+funcParamList = funcParam.a {: return new List().add(a); :}
+				| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
+				;
+funcParam = expr.e {: return new FuncParam(e); :};
