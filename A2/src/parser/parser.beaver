@@ -32,6 +32,7 @@
 %typeof assignment = "Assignment";
 %typeof returnStmt = "ReturnStmt";
 %typeof funcCallStmt = "FuncCallStmt";
+%typeof ifStmt = "IfStmt";
 %typeof expr = "Expr";
 %typeof numeral = "Numeral";
 %typeof arithExpr = "ArithExpr";
@@ -61,7 +62,7 @@ funcParamList = /* epsilon */ {: return new List(); :}
 				| funcParam.a {: return new List().add(a); :}
 				| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
 				;
-funcParam = id_use.id {: return new FuncParam(id); :} ;
+funcParam = expr.e {: return new FuncParam(e); :};
 
 stmtList = /* epsilon */ {: return new List(); :}
 			| stmtList.a stmt.b {: return a.add(b); :}
@@ -70,6 +71,7 @@ stmt = decl
 		| assignment
 		| returnStmt
 		| funcCallStmt
+		| ifStmt
 		;
 returnStmt = RETURN expr.e SEMICOLON {: return new ReturnStmt(e); :};
 funcCallStmt = funcCall.f SEMICOLON {: return new FuncCallStmt(f); :};
@@ -77,7 +79,9 @@ decl = INT id_decl.id SEMICOLON {: return new Decl(id, new Opt()); :}
 		| INT id_decl.id ASSIGN expr.e SEMICOLON {: return new Decl(id, new Opt(e)); :}
 		;
 assignment = id_decl.id ASSIGN expr.e SEMICOLON {: return new Assignment(id, e); :};
-
+ifStmt = IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK {: return new IfStmt(c, s, new List()); :}
+		| IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK ELSE LBRACK stmtList.e RBRACK {: return new IfStmt(c, s, e); :}
+		;
 expr = compExpr
 		| arithExpr
 		;

@@ -3,4 +3,5 @@ int main(int paramdecl) {
     int y = g();
     int z = h(c);
     read(z);
+    print(2, a+B, y<e);
 }

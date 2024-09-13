@@ -1,7 +1,7 @@
 Program ::= FuncDecl*;
-FuncDecl ::= FuncName:IdDecl ParamList:FuncDeclParam* StmtList:Stmt*;
+FuncDecl ::= FuncName:IdDecl ParamList:FuncDeclParam* Block:Stmt*;
 FuncDeclParam ::= ParamName:IdDecl;
-FuncParam ::= ParamName:IdUse;
+FuncParam ::= Expr;
 
 IdDecl ::= <ID>;
 
@@ -10,6 +10,7 @@ ReturnStmt : Stmt ::= Expr;
 Decl : Stmt ::= IdDecl [Expr];
 Assignment : Stmt ::= IdDecl Expr;
 FuncCallStmt : Stmt ::= FuncCall;
+IfStmt : Stmt ::= Condition:Expr Block:Stmt* ElseBlock:Stmt*;
 
 abstract Expr;
 LtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
