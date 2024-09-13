@@ -36,6 +36,7 @@ Numeral = 0|[1-9][0-9]*
 // discard whitespace information
 {WhiteSpace}  { }
 // comments
+"/*" ~"*/" { }
 "//" [^\n\r]* [\n\r]? { }
 
 // token definitions
