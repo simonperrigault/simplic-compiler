@@ -4,40 +4,44 @@ Program
       IdDecl ID="main"
       List
       List
-        Decl
-          IdDecl ID="x"
-          Opt
-            Numeral NUMERAL="3"
-        Decl
-          IdDecl ID="y"
-          Opt
-            IdUse ID="x"
-        Assignment
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="x"
+              Opt
+                Numeral NUMERAL="3"
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="y"
+              Opt
+                IdUse ID="x"
+        AssignStmt
           IdDecl ID="x"
           AddExpr
             IdUse ID="x"
             IdUse ID="y"
-        Assignment
+        AssignStmt
           IdDecl ID="x"
           AddExpr
             MulExpr
               Numeral NUMERAL="3"
               IdUse ID="x"
             IdUse ID="y"
-        Assignment
+        AssignStmt
           IdDecl ID="x"
           AddExpr
             IdUse ID="x"
             MulExpr
               IdUse ID="y"
               Numeral NUMERAL="3"
-        Assignment
+        AssignStmt
           IdDecl ID="x"
           AddExpr
             OppExpr
               IdUse ID="x"
             IdUse ID="y"
-        Assignment
+        AssignStmt
           IdDecl ID="x"
           MulExpr
             PrimaryExpr
@@ -45,10 +49,11 @@ Program
                 IdUse ID="x"
                 IdUse ID="y"
             Numeral NUMERAL="3"
-        Assignment
+        AssignStmt
           IdDecl ID="x"
           OppExpr
             PrimaryExpr
               AddExpr
                 IdUse ID="x"
                 IdUse ID="y"
+

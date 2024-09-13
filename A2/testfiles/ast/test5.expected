@@ -4,16 +4,18 @@ Program
       IdDecl ID="main"
       List
       List
-        Decl
-          IdDecl ID="x"
-          Opt
-            Numeral NUMERAL="0"
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="x"
+              Opt
+                Numeral NUMERAL="0"
         IfStmt
           EqExpr
             IdUse ID="x"
             Numeral NUMERAL="0"
           List
-            Assignment
+            AssignStmt
               IdDecl ID="x"
               Numeral NUMERAL="1"
           List
@@ -29,3 +31,4 @@ Program
                 List
                   FuncParam
                     Numeral NUMERAL="2"
+

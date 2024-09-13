@@ -18,13 +18,13 @@ Program
                 IdUse ID="a"
                 IdUse ID="b"
               List
-                Assignment
+                AssignStmt
                   IdDecl ID="a"
                   SubExpr
                     IdUse ID="a"
                     IdUse ID="b"
               List
-                Assignment
+                AssignStmt
                   IdDecl ID="b"
                   SubExpr
                     IdUse ID="b"
@@ -61,18 +61,22 @@ Program
       IdDecl ID="main"
       List
       List
-        Decl
-          IdDecl ID="a"
-          Opt
-        Decl
-          IdDecl ID="b"
-          Opt
-        Assignment
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="a"
+              Opt
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="b"
+              Opt
+        AssignStmt
           IdDecl ID="a"
           FuncCall
             IdUse ID="read"
             List
-        Assignment
+        AssignStmt
           IdDecl ID="b"
           FuncCall
             IdUse ID="read"
@@ -101,24 +105,26 @@ Program
                       IdUse ID="a"
                     FuncParam
                       IdUse ID="b"
-        Decl
-          IdDecl ID="diff"
-          Opt
-            SubExpr
-              FuncCall
-                IdUse ID="gcd1"
-                List
-                  FuncParam
-                    IdUse ID="a"
-                  FuncParam
-                    IdUse ID="b"
-              FuncCall
-                IdUse ID="gcd2"
-                List
-                  FuncParam
-                    IdUse ID="a"
-                  FuncParam
-                    IdUse ID="b"
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="diff"
+              Opt
+                SubExpr
+                  FuncCall
+                    IdUse ID="gcd1"
+                    List
+                      FuncParam
+                        IdUse ID="a"
+                      FuncParam
+                        IdUse ID="b"
+                  FuncCall
+                    IdUse ID="gcd2"
+                    List
+                      FuncParam
+                        IdUse ID="a"
+                      FuncParam
+                        IdUse ID="b"
         FuncCallStmt
           FuncCall
             IdUse ID="print"

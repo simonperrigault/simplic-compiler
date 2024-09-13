@@ -1,0 +1,40 @@
+Program
+  List
+    FuncDecl
+      IdDecl ID="main"
+      List
+      List
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="x"
+              Opt
+                Numeral NUMERAL="8"
+            Decl
+              IdDecl ID="y"
+              Opt
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="x"
+              Opt
+            Decl
+              IdDecl ID="y"
+              Opt
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="x"
+              Opt
+                Numeral NUMERAL="9"
+            Decl
+              IdDecl ID="y"
+              Opt
+                Numeral NUMERAL="0"
+            Decl
+              IdDecl ID="t"
+              Opt
+                Numeral NUMERAL="5"
+            Decl
+              IdDecl ID="a"
+              Opt

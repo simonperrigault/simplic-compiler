@@ -30,14 +30,17 @@
 
 %typeof stmt = "Stmt";
 %typeof stmtList = "List";
-%typeof decl = "Decl";
-%typeof assignment = "Assignment";
+%typeof declStmt = "DeclStmt";
+%typeof assignStmt = "AssignStmt";
 %typeof returnStmt = "ReturnStmt";
 %typeof funcCallStmt = "FuncCallStmt";
 %typeof ifStmt = "IfStmt";
 %typeof whileStmt = "WhileStmt";
 %typeof continueStmt = "ContinueStmt";
 %typeof breakStmt = "BreakStmt";
+
+%typeof decl = "Decl";
+%typeof declList = "List";
 
 %typeof expr = "Expr";
 %typeof numeral = "Numeral";
@@ -71,8 +74,8 @@ funcDeclParam = INT id_decl.id {: return new FuncDeclParam(id); :} ;
 stmtList = /* epsilon */ {: return new List(); :}
 			| stmtList.a stmt.b {: return a.add(b); :}
 			;
-stmt = decl
-		| assignment
+stmt = declStmt
+		| assignStmt
 		| returnStmt
 		| funcCallStmt
 		| ifStmt
@@ -82,16 +85,21 @@ stmt = decl
 		;
 returnStmt = RETURN expr.e SEMICOLON {: return new ReturnStmt(e); :};
 funcCallStmt = funcCall.f SEMICOLON {: return new FuncCallStmt(f); :};
-decl = INT id_decl.id SEMICOLON {: return new Decl(id, new Opt()); :}
-		| INT id_decl.id ASSIGN expr.e SEMICOLON {: return new Decl(id, new Opt(e)); :}
-		;
-assignment = id_decl.id ASSIGN expr.e SEMICOLON {: return new Assignment(id, e); :};
+assignStmt = id_decl.id ASSIGN expr.e SEMICOLON {: return new AssignStmt(id, e); :};
 ifStmt = IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK {: return new IfStmt(c, s, new List()); :}
 		| IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK ELSE LBRACK stmtList.e RBRACK {: return new IfStmt(c, s, e); :}
 		;
 whileStmt = WHILE LPAR expr.c RPAR LBRACK stmtList.s RBRACK {: return new WhileStmt(c, s); :};
 continueStmt = CONTINUE SEMICOLON {: return new ContinueStmt(); :};
 breakStmt = BREAK SEMICOLON {: return new BreakStmt(); :};
+
+declStmt = INT declList.l SEMICOLON {: return new DeclStmt(l); :};
+decl = id_decl.id {: return new Decl(id, new Opt()); :}
+		| id_decl.id ASSIGN expr.e {: return new Decl(id, new Opt(e)); :}
+		;
+declList = decl.d {: return new List().add(d); :}
+		| declList.l COMMA decl.d {: return l.add(d); :}
+		;
 
 expr = compExpr
 		| arithExpr

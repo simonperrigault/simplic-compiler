@@ -4,16 +4,20 @@ Program
       IdDecl ID="main"
       List
       List
-        Decl
-          IdDecl ID="x"
-          Opt
-        Decl
-          IdDecl ID="y"
-          Opt
-            Numeral NUMERAL="2"
-        Assignment
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="x"
+              Opt
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="y"
+              Opt
+                Numeral NUMERAL="2"
+        AssignStmt
           IdDecl ID="x"
           Numeral NUMERAL="3"
-        Assignment
+        AssignStmt
           IdDecl ID="x"
           IdUse ID="y"

@@ -4,18 +4,22 @@ Program
       IdDecl ID="main"
       List
       List
-        Decl
-          IdDecl ID="x"
-          Opt
-        Decl
-          IdDecl ID="y"
-          Opt
-        Assignment
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="x"
+              Opt
+        DeclStmt
+          List
+            Decl
+              IdDecl ID="y"
+              Opt
+        AssignStmt
           IdDecl ID="x"
           LtExpr
             IdUse ID="x"
             Numeral NUMERAL="3"
-        Assignment
+        AssignStmt
           IdDecl ID="y"
           GeExpr
             AddExpr
@@ -24,7 +28,7 @@ Program
                 IdUse ID="y"
                 Numeral NUMERAL="3"
             Numeral NUMERAL="12"
-        Assignment
+        AssignStmt
           IdDecl ID="x"
           NeqExpr
             AddExpr
@@ -36,3 +40,4 @@ Program
                   IdUse ID="y"
               Numeral NUMERAL="3"
             Numeral NUMERAL="1"
+

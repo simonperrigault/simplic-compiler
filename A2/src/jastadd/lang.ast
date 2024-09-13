@@ -7,13 +7,15 @@ IdDecl ::= <ID>;
 
 abstract Stmt;
 ReturnStmt : Stmt ::= Expr;
-Decl : Stmt ::= IdDecl [Expr];
-Assignment : Stmt ::= IdDecl Expr;
+DeclStmt : Stmt ::= Decl*;
+AssignStmt : Stmt ::= IdDecl Expr;
 FuncCallStmt : Stmt ::= FuncCall;
 IfStmt : Stmt ::= Condition:Expr Block:Stmt* ElseBlock:Stmt*;
 WhileStmt : Stmt ::= Condition:Expr Block:Stmt*;
 ContinueStmt : Stmt;
 BreakStmt : Stmt;
+
+Decl ::= IdDecl [Expr];
 
 abstract Expr;
 LtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
