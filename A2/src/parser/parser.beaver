@@ -13,7 +13,7 @@
 		   MUL, DIV, MOD, ADD, SUB, EQ, NEQ,
 		   LE, LT, GE, GT, ASSIGN, LPAR, RPAR,
 		   LBRACK, RBRACK, SEMICOLON, COMMA, NUMERAL,
-		   COMMENT;
+		   COMMENT, BREAK, CONTINUE;
 
 %typeof program = "Program";
 
@@ -36,6 +36,8 @@
 %typeof funcCallStmt = "FuncCallStmt";
 %typeof ifStmt = "IfStmt";
 %typeof whileStmt = "WhileStmt";
+%typeof continueStmt = "ContinueStmt";
+%typeof breakStmt = "BreakStmt";
 
 %typeof expr = "Expr";
 %typeof numeral = "Numeral";
@@ -75,6 +77,8 @@ stmt = decl
 		| funcCallStmt
 		| ifStmt
 		| whileStmt
+		| continueStmt
+		| breakStmt
 		;
 returnStmt = RETURN expr.e SEMICOLON {: return new ReturnStmt(e); :};
 funcCallStmt = funcCall.f SEMICOLON {: return new FuncCallStmt(f); :};
@@ -86,6 +90,8 @@ ifStmt = IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK {: return new IfStmt(c, s,
 		| IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK ELSE LBRACK stmtList.e RBRACK {: return new IfStmt(c, s, e); :}
 		;
 whileStmt = WHILE LPAR expr.c RPAR LBRACK stmtList.s RBRACK {: return new WhileStmt(c, s); :};
+continueStmt = CONTINUE SEMICOLON {: return new ContinueStmt(); :};
+breakStmt = BREAK SEMICOLON {: return new BreakStmt(); :};
 
 expr = compExpr
 		| arithExpr

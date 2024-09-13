@@ -44,6 +44,8 @@ Numeral = 0|[1-9][0-9]*
 "else"      { return sym(Terminals.ELSE); }
 "int"       { return sym(Terminals.INT); }
 "return"    { return sym(Terminals.RETURN); }
+"break"     { return sym(Terminals.BREAK); }
+"continue"  { return sym(Terminals.CONTINUE); }
 "*"         { return sym(Terminals.MUL); }
 "/"         { return sym(Terminals.DIV); }
 "%"         { return sym(Terminals.MOD); }
