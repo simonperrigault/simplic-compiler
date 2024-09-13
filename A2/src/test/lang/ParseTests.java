@@ -33,6 +33,14 @@ public class ParseTests {
 	public void correct6() {
 		Util.testValidSyntax(TEST_DIRECTORY, "correct6.in");
 	}
+	@Test
+	public void correct7() {
+		Util.testValidSyntax(TEST_DIRECTORY, "correct7.in");
+	}
+	@Test
+	public void correctPdf() {
+		Util.testValidSyntax(TEST_DIRECTORY, "correctPdf.in");
+	}
 
 	@Test
 	public void error1() {

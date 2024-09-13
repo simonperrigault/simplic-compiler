@@ -1,0 +1,31 @@
+Program
+  List
+    FuncDecl
+      IdDecl ID="main"
+      List
+      List
+        Decl
+          IdDecl ID="x"
+          Opt
+            Numeral NUMERAL="0"
+        IfStmt
+          EqExpr
+            IdUse ID="x"
+            Numeral NUMERAL="0"
+          List
+            Assignment
+              IdDecl ID="x"
+              Numeral NUMERAL="1"
+          List
+        IfStmt
+          LtExpr
+            IdUse ID="x"
+            Numeral NUMERAL="2"
+          List
+          List
+            FuncCallStmt
+              FuncCall
+                IdUse ID="print"
+                List
+                  FuncParam
+                    Numeral NUMERAL="2"
