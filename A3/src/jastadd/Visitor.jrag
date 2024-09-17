@@ -1,0 +1,155 @@
+aspect Visitor {
+    /**
+     * Visitor interface for SimpliC language. Each concrete node type must
+     * have a visit method.
+     */
+    public interface Visitor {
+        public Object visit(List node, Object data);
+        public Object visit(Opt node, Object data);
+        public Object visit(Program node, Object data);
+
+        public Object visit(FuncDecl node, Object data);
+        public Object visit(FuncDeclParam node, Object data);
+        public Object visit(FuncParam node, Object data);
+
+        public Object visit(IdDecl node, Object data);
+        public Object visit(Decl node, Object data);
+
+        public Object visit(Block node, Object data);
+        public Object visit(ReturnStmt node, Object data);
+        public Object visit(DeclStmt node, Object data);
+        public Object visit(AssignStmt node, Object data);
+        public Object visit(FuncCallStmt node, Object data);
+        public Object visit(IfStmt node, Object data);
+        public Object visit(WhileStmt node, Object data);
+        public Object visit(ContinueStmt node, Object data);
+        public Object visit(BreakStmt node, Object data);
+
+        public Object visit(LtExpr node, Object data);
+        public Object visit(LeExpr node, Object data);
+        public Object visit(GtExpr node, Object data);
+        public Object visit(GeExpr node, Object data);
+        public Object visit(EqExpr node, Object data);
+        public Object visit(NeqExpr node, Object data);
+
+        public Object visit(AddExpr node, Object data);
+        public Object visit(SubExpr node, Object data);
+        public Object visit(MulExpr node, Object data);
+        public Object visit(DivExpr node, Object data);
+        public Object visit(ModExpr node, Object data);
+        public Object visit(OppExpr node, Object data);
+        public Object visit(PrimaryExpr node, Object data);
+        public Object visit(FuncCall node, Object data);
+        public Object visit(Numeral node, Object data);
+        public Object visit(IdUse node, Object data);
+    }
+
+    public Object ASTNode.accept(Visitor visitor, Object data) {
+        throw new Error("Visitor: accept method not available for " + getClass().getName());
+    }
+    public Object List.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object Opt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object Program.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    
+    public Object FuncDecl.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object FuncDeclParam.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object FuncParam.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+
+    public Object IdDecl.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object Decl.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+
+    public Object Block.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object ReturnStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object DeclStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object AssignStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object FuncCallStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object IfStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object WhileStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object ContinueStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object BreakStmt.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+
+    public Object LtExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object LeExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object GtExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object GeExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object EqExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object NeqExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+
+    public Object AddExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object SubExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object MulExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object DivExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object ModExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object OppExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object PrimaryExpr.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object FuncCall.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object Numeral.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    public Object IdUse.accept(Visitor visitor, Object data) {
+        return visitor.visit(this, data);
+    }
+    
+}

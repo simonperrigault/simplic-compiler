@@ -4,6 +4,7 @@ FuncDeclParam ::= ParamName:IdDecl;
 FuncParam ::= Expr;
 
 IdDecl ::= <ID>;
+Decl ::= IdDecl [Expr];
 
 abstract Stmt;
 Block : Stmt ::= Stmt*;
@@ -15,8 +16,6 @@ IfStmt : Stmt ::= Condition:Expr Block [ElseBlock:Block];
 WhileStmt : Stmt ::= Condition:Expr Block;
 ContinueStmt : Stmt;
 BreakStmt : Stmt;
-
-Decl ::= IdDecl [Expr];
 
 abstract Expr;
 LtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
