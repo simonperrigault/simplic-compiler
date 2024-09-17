@@ -1,0 +1,17 @@
+Program
+  List
+    FuncDecl
+      IdDecl ID="main"
+      List
+        FuncDeclParam
+          IdDecl ID="param1"
+      Block
+        List
+    FuncDecl
+      IdDecl ID="main_2"
+      List
+      Block
+        List
+          ReturnStmt
+            Numeral NUMERAL="0"
+

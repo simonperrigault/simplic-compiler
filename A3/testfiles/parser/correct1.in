@@ -1,0 +1,12 @@
+int main(int param1) {
+}
+
+int main_2() {
+    int a;
+    {
+        int a;
+    }
+    {
+        
+    }
+}

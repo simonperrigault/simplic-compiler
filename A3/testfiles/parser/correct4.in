@@ -1,0 +1,8 @@
+int main() {
+    int x;
+    int y;
+
+    x = x < 3;
+    y = x + y * 3 >= 12;
+    x = (x*3 == y) + 3 != 1;
+}

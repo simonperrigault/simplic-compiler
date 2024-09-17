@@ -1,0 +1,147 @@
+%class "LangParser";
+%package "lang.ast";
+
+%embed {:
+	static public class SyntaxError extends RuntimeException { public SyntaxError(String msg) {super(msg);}}
+	// Disable syntax error recovery
+	protected void recoverFromError(Symbol token, TokenStream in) {
+		throw new SyntaxError("Cannot recover from the syntax error");
+	}
+:};
+
+%terminals ID, WHILE, IF, ELSE, INT, RETURN, 
+		   MUL, DIV, MOD, ADD, SUB, EQ, NEQ,
+		   LE, LT, GE, GT, ASSIGN, LPAR, RPAR,
+		   LBRACK, RBRACK, SEMICOLON, COMMA, NUMERAL,
+		   COMMENT, BREAK, CONTINUE;
+
+%typeof program = "Program";
+
+%typeof funcDecl = "FuncDecl";
+%typeof funcDeclList = "List";
+%typeof funcDeclParam = "FuncDeclParam";
+%typeof funcParam = "FuncParam";
+%typeof funcDeclParamList = "List";
+%typeof funcParamList = "List";
+%typeof type = "Type";
+%typeof varDecl = "VarDecl";
+%typeof id_use = "IdUse";
+%typeof id_decl = "IdDecl";
+
+%typeof stmt = "Stmt";
+%typeof block = "Block";
+%typeof stmtList = "List";
+%typeof declStmt = "DeclStmt";
+%typeof assignStmt = "AssignStmt";
+%typeof returnStmt = "ReturnStmt";
+%typeof funcCallStmt = "FuncCallStmt";
+%typeof ifStmt = "IfStmt";
+%typeof whileStmt = "WhileStmt";
+%typeof continueStmt = "ContinueStmt";
+%typeof breakStmt = "BreakStmt";
+
+%typeof decl = "Decl";
+%typeof declList = "List";
+
+%typeof expr = "Expr";
+%typeof numeral = "Numeral";
+%typeof arithExpr = "ArithExpr";
+%typeof addExpr = "ArithExpr";
+%typeof subExpr = "ArithExpr";
+%typeof mulExpr = "ArithExpr";
+%typeof divExpr = "ArithExpr";
+%typeof modExpr = "ArithExpr";
+%typeof oppExpr = "ArithExpr";
+%typeof primaryExpr = "ArithExpr";
+%typeof funcCall = "FuncCall";
+%typeof compExpr = "Expr";
+
+%goal program;
+
+program = /* epsilon */ {: return new Program(new List()); :}
+		| funcDeclList.a {: return new Program(a); :};
+
+funcDeclList = funcDecl.a {: return new List().add(a); :}
+			| funcDeclList.a funcDecl.b {: return a.add(b); :}
+			;
+funcDecl = INT id_decl.id LPAR RPAR block.b {: return new FuncDecl(id, new List(), b); :}
+			| INT id_decl.id LPAR funcDeclParamList.l RPAR block.b {: return new FuncDecl(id, l, b); :}
+			;
+funcDeclParamList = funcDeclParam.a {: return new List().add(a); :}
+					| funcDeclParamList.a COMMA funcDeclParam.b {: return a.add(b); :}
+					;
+funcDeclParam = INT id_decl.id {: return new FuncDeclParam(id); :} ;
+
+stmtList = /* epsilon */ {: return new List(); :}
+			| stmtList.a stmt.b {: return a.add(b); :}
+			;
+stmt = block
+		| declStmt
+		| assignStmt
+		| returnStmt
+		| funcCallStmt
+		| ifStmt
+		| whileStmt
+		| continueStmt
+		| breakStmt
+		;
+block = LBRACK stmtList.s RBRACK {: return new Block(s); :};
+returnStmt = RETURN expr.e SEMICOLON {: return new ReturnStmt(e); :};
+funcCallStmt = funcCall.f SEMICOLON {: return new FuncCallStmt(f); :};
+assignStmt = id_decl.id ASSIGN expr.e SEMICOLON {: return new AssignStmt(id, e); :};
+ifStmt = IF LPAR expr.c RPAR block.b {: return new IfStmt(c, b, new Opt()); :}
+		| IF LPAR expr.c RPAR block.b ELSE block.e {: return new IfStmt(c, b, new Opt(e)); :}
+		;
+whileStmt = WHILE LPAR expr.c RPAR block.b {: return new WhileStmt(c, b); :};
+continueStmt = CONTINUE SEMICOLON {: return new ContinueStmt(); :};
+breakStmt = BREAK SEMICOLON {: return new BreakStmt(); :};
+
+declStmt = INT declList.l SEMICOLON {: return new DeclStmt(l); :};
+decl = id_decl.id {: return new Decl(id, new Opt()); :}
+		| id_decl.id ASSIGN expr.e {: return new Decl(id, new Opt(e)); :}
+		;
+declList = decl.d {: return new List().add(d); :}
+		| declList.l COMMA decl.d {: return l.add(d); :}
+		;
+
+expr = compExpr
+		| arithExpr
+		;
+compExpr = arithExpr.a LE arithExpr.b {: return new LeExpr(a,b); :}
+		| arithExpr.a LT arithExpr.b {: return new LtExpr(a,b); :}
+		| arithExpr.a GE arithExpr.b {: return new GeExpr(a,b); :}
+		| arithExpr.a GT arithExpr.b {: return new GtExpr(a,b); :}
+		| arithExpr.a EQ arithExpr.b {: return new EqExpr(a,b); :}
+		| arithExpr.a NEQ arithExpr.b {: return new NeqExpr(a,b); :}
+		;
+arithExpr = addExpr
+		;
+addExpr = mulExpr.m
+		| addExpr.a ADD mulExpr.m {: return new AddExpr(a, m); :}
+		| addExpr.a SUB mulExpr.m {: return new SubExpr(a, m); :}
+		;
+mulExpr = oppExpr
+		| mulExpr.m MUL oppExpr.o  {: return new MulExpr(m, o); :}
+		| mulExpr.m DIV oppExpr.o  {: return new DivExpr(m, o); :}
+		| mulExpr.m MOD oppExpr.o  {: return new ModExpr(m, o); :}
+		;
+oppExpr = primaryExpr
+		| SUB oppExpr.p {: return new OppExpr(p); :}
+		;
+primaryExpr = id_use
+			| numeral
+			| funcCall
+			| LPAR expr.e RPAR {: return new PrimaryExpr(e); :}
+			;
+
+numeral = NUMERAL.n {: return new Numeral(n); :};
+id_use = ID.id {: return new IdUse(id); :};
+id_decl = ID.id {: return new IdDecl(id); :};
+funcCall = id_use.id LPAR RPAR {: return new FuncCall(id, new List()); :}
+		| id_use.id LPAR funcParamList.l RPAR {: return new FuncCall(id, l); :}
+		;
+
+funcParamList = funcParam.a {: return new List().add(a); :}
+				| funcParamList.a COMMA funcParam.b {: return a.add(b); :}
+				;
+funcParam = expr.e {: return new FuncParam(e); :};

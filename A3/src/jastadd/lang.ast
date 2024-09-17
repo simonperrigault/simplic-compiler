@@ -1,0 +1,39 @@
+Program ::= FuncDecl*;
+FuncDecl ::= FuncName:IdDecl ParamList:FuncDeclParam* Block;
+FuncDeclParam ::= ParamName:IdDecl;
+FuncParam ::= Expr;
+
+IdDecl ::= <ID>;
+
+abstract Stmt;
+Block : Stmt ::= Stmt*;
+ReturnStmt : Stmt ::= Expr;
+DeclStmt : Stmt ::= Decl*;
+AssignStmt : Stmt ::= IdDecl Expr;
+FuncCallStmt : Stmt ::= FuncCall;
+IfStmt : Stmt ::= Condition:Expr Block [ElseBlock:Block];
+WhileStmt : Stmt ::= Condition:Expr Block;
+ContinueStmt : Stmt;
+BreakStmt : Stmt;
+
+Decl ::= IdDecl [Expr];
+
+abstract Expr;
+LtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+LeExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+GtExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+GeExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+EqExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+NeqExpr : Expr ::= Left:ArithExpr Right:ArithExpr;
+
+abstract ArithExpr : Expr;
+AddExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+SubExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+MulExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+DivExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+ModExpr : ArithExpr ::= Left:ArithExpr Right:ArithExpr;
+OppExpr : ArithExpr ::= ArithExpr;
+PrimaryExpr : ArithExpr ::= Expr;
+FuncCall : ArithExpr ::= FuncName:IdUse ParamList:FuncParam*;
+Numeral : ArithExpr ::= <NUMERAL>;
+IdUse : ArithExpr ::= <ID>;
