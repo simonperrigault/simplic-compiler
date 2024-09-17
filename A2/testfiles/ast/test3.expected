@@ -3,57 +3,58 @@ Program
     FuncDecl
       IdDecl ID="main"
       List
-      List
-        DeclStmt
-          List
-            Decl
-              IdDecl ID="x"
-              Opt
-                Numeral NUMERAL="3"
-        DeclStmt
-          List
-            Decl
-              IdDecl ID="y"
-              Opt
-                IdUse ID="x"
-        AssignStmt
-          IdDecl ID="x"
-          AddExpr
-            IdUse ID="x"
-            IdUse ID="y"
-        AssignStmt
-          IdDecl ID="x"
-          AddExpr
-            MulExpr
-              Numeral NUMERAL="3"
+      Block
+        List
+          DeclStmt
+            List
+              Decl
+                IdDecl ID="x"
+                Opt
+                  Numeral NUMERAL="3"
+          DeclStmt
+            List
+              Decl
+                IdDecl ID="y"
+                Opt
+                  IdUse ID="x"
+          AssignStmt
+            IdDecl ID="x"
+            AddExpr
               IdUse ID="x"
-            IdUse ID="y"
-        AssignStmt
-          IdDecl ID="x"
-          AddExpr
-            IdUse ID="x"
-            MulExpr
               IdUse ID="y"
-              Numeral NUMERAL="3"
-        AssignStmt
-          IdDecl ID="x"
-          AddExpr
-            OppExpr
+          AssignStmt
+            IdDecl ID="x"
+            AddExpr
+              MulExpr
+                Numeral NUMERAL="3"
+                IdUse ID="x"
+              IdUse ID="y"
+          AssignStmt
+            IdDecl ID="x"
+            AddExpr
               IdUse ID="x"
-            IdUse ID="y"
-        AssignStmt
-          IdDecl ID="x"
-          MulExpr
-            PrimaryExpr
-              AddExpr
-                IdUse ID="x"
+              MulExpr
                 IdUse ID="y"
-            Numeral NUMERAL="3"
-        AssignStmt
-          IdDecl ID="x"
-          OppExpr
-            PrimaryExpr
-              AddExpr
+                Numeral NUMERAL="3"
+          AssignStmt
+            IdDecl ID="x"
+            AddExpr
+              OppExpr
                 IdUse ID="x"
-                IdUse ID="y"
+              IdUse ID="y"
+          AssignStmt
+            IdDecl ID="x"
+            MulExpr
+              PrimaryExpr
+                AddExpr
+                  IdUse ID="x"
+                  IdUse ID="y"
+              Numeral NUMERAL="3"
+          AssignStmt
+            IdDecl ID="x"
+            OppExpr
+              PrimaryExpr
+                AddExpr
+                  IdUse ID="x"
+                  IdUse ID="y"
 

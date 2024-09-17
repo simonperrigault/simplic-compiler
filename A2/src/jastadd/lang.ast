@@ -1,17 +1,18 @@
 Program ::= FuncDecl*;
-FuncDecl ::= FuncName:IdDecl ParamList:FuncDeclParam* Block:Stmt*;
+FuncDecl ::= FuncName:IdDecl ParamList:FuncDeclParam* Block;
 FuncDeclParam ::= ParamName:IdDecl;
 FuncParam ::= Expr;
 
 IdDecl ::= <ID>;
 
 abstract Stmt;
+Block : Stmt ::= Stmt*;
 ReturnStmt : Stmt ::= Expr;
 DeclStmt : Stmt ::= Decl*;
 AssignStmt : Stmt ::= IdDecl Expr;
 FuncCallStmt : Stmt ::= FuncCall;
-IfStmt : Stmt ::= Condition:Expr Block:Stmt* ElseBlock:Stmt*;
-WhileStmt : Stmt ::= Condition:Expr Block:Stmt*;
+IfStmt : Stmt ::= Condition:Expr Block [ElseBlock:Block];
+WhileStmt : Stmt ::= Condition:Expr Block;
 ContinueStmt : Stmt;
 BreakStmt : Stmt;
 

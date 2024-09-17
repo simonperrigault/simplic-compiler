@@ -3,21 +3,22 @@ Program
     FuncDecl
       IdDecl ID="main"
       List
-      List
-        DeclStmt
-          List
-            Decl
-              IdDecl ID="x"
-              Opt
-        DeclStmt
-          List
-            Decl
-              IdDecl ID="y"
-              Opt
-                Numeral NUMERAL="2"
-        AssignStmt
-          IdDecl ID="x"
-          Numeral NUMERAL="3"
-        AssignStmt
-          IdDecl ID="x"
-          IdUse ID="y"
+      Block
+        List
+          DeclStmt
+            List
+              Decl
+                IdDecl ID="x"
+                Opt
+          DeclStmt
+            List
+              Decl
+                IdDecl ID="y"
+                Opt
+                  Numeral NUMERAL="2"
+          AssignStmt
+            IdDecl ID="x"
+            Numeral NUMERAL="3"
+          AssignStmt
+            IdDecl ID="x"
+            IdUse ID="y"

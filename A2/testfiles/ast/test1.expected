@@ -5,10 +5,13 @@ Program
       List
         FuncDeclParam
           IdDecl ID="param1"
-      List
+      Block
+        List
     FuncDecl
       IdDecl ID="main_2"
       List
-      List
-        ReturnStmt
-          Numeral NUMERAL="0"
+      Block
+        List
+          ReturnStmt
+            Numeral NUMERAL="0"
+

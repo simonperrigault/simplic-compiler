@@ -29,6 +29,7 @@
 %typeof id_decl = "IdDecl";
 
 %typeof stmt = "Stmt";
+%typeof block = "Block";
 %typeof stmtList = "List";
 %typeof declStmt = "DeclStmt";
 %typeof assignStmt = "AssignStmt";
@@ -63,8 +64,8 @@ program = /* epsilon */ {: return new Program(new List()); :}
 funcDeclList = funcDecl.a {: return new List().add(a); :}
 			| funcDeclList.a funcDecl.b {: return a.add(b); :}
 			;
-funcDecl = INT id_decl.id LPAR RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, new List(), s); :}
-			| INT id_decl.id LPAR funcDeclParamList.l RPAR LBRACK stmtList.s RBRACK {: return new FuncDecl(id, l, s); :}
+funcDecl = INT id_decl.id LPAR RPAR block.b {: return new FuncDecl(id, new List(), b); :}
+			| INT id_decl.id LPAR funcDeclParamList.l RPAR block.b {: return new FuncDecl(id, l, b); :}
 			;
 funcDeclParamList = funcDeclParam.a {: return new List().add(a); :}
 					| funcDeclParamList.a COMMA funcDeclParam.b {: return a.add(b); :}
@@ -74,7 +75,8 @@ funcDeclParam = INT id_decl.id {: return new FuncDeclParam(id); :} ;
 stmtList = /* epsilon */ {: return new List(); :}
 			| stmtList.a stmt.b {: return a.add(b); :}
 			;
-stmt = declStmt
+stmt = block
+		| declStmt
 		| assignStmt
 		| returnStmt
 		| funcCallStmt
@@ -83,13 +85,14 @@ stmt = declStmt
 		| continueStmt
 		| breakStmt
 		;
+block = LBRACK stmtList.s RBRACK {: return new Block(s); :};
 returnStmt = RETURN expr.e SEMICOLON {: return new ReturnStmt(e); :};
 funcCallStmt = funcCall.f SEMICOLON {: return new FuncCallStmt(f); :};
 assignStmt = id_decl.id ASSIGN expr.e SEMICOLON {: return new AssignStmt(id, e); :};
-ifStmt = IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK {: return new IfStmt(c, s, new List()); :}
-		| IF LPAR expr.c RPAR LBRACK stmtList.s RBRACK ELSE LBRACK stmtList.e RBRACK {: return new IfStmt(c, s, e); :}
+ifStmt = IF LPAR expr.c RPAR block.b {: return new IfStmt(c, b, new Opt()); :}
+		| IF LPAR expr.c RPAR block.b ELSE block.e {: return new IfStmt(c, b, new Opt(e)); :}
 		;
-whileStmt = WHILE LPAR expr.c RPAR LBRACK stmtList.s RBRACK {: return new WhileStmt(c, s); :};
+whileStmt = WHILE LPAR expr.c RPAR block.b {: return new WhileStmt(c, b); :};
 continueStmt = CONTINUE SEMICOLON {: return new ContinueStmt(); :};
 breakStmt = BREAK SEMICOLON {: return new BreakStmt(); :};
 
