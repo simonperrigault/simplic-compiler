@@ -34,8 +34,8 @@ public class Compiler {
                 return;
             }
             Program program = parse(args);
-            System.out.println("MSN : " + MSNVisitor.result(program));
-            // program.prettyPrint(System.out);
+            // System.out.println("MSN : " + MSNVisitor.result(program));
+            program.prettyPrint(System.out);
             // System.out.println("Found interactive statement(s): " + CheckInteractiveVisitor.result(program));
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
