@@ -86,6 +86,16 @@ aspect PrettyPrint {
         out.println(";");
     }
     public void IfStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        out.print("if (");
+        getCondition().prettyPrint(out, ind);
+        out.println(")");
+        getBlock().prettyPrint(out, ind);
+        if (hasElseBlock()) {
+            out.print(ind);
+            out.println("else");
+            getElseBlock().prettyPrint(out,ind);
+        }
     }
     public void WhileStmt.prettyPrint(PrintStream out, String ind) {
     }
