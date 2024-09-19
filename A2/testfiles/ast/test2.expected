@@ -17,9 +17,8 @@ Program
                 Opt
                   Numeral NUMERAL="2"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             Numeral NUMERAL="3"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             IdUse ID="y"
-

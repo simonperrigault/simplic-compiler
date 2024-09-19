@@ -18,32 +18,32 @@ Program
                 Opt
                   IdUse ID="x"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             AddExpr
               IdUse ID="x"
               IdUse ID="y"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             AddExpr
               MulExpr
                 Numeral NUMERAL="3"
                 IdUse ID="x"
               IdUse ID="y"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             AddExpr
               IdUse ID="x"
               MulExpr
                 IdUse ID="y"
                 Numeral NUMERAL="3"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             AddExpr
               OppExpr
                 IdUse ID="x"
               IdUse ID="y"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             MulExpr
               PrimaryExpr
                 AddExpr
@@ -51,10 +51,9 @@ Program
                   IdUse ID="y"
               Numeral NUMERAL="3"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             OppExpr
               PrimaryExpr
                 AddExpr
                   IdUse ID="x"
                   IdUse ID="y"
-

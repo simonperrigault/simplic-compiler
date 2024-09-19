@@ -16,12 +16,12 @@ Program
                 IdDecl ID="y"
                 Opt
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             LtExpr
               IdUse ID="x"
               Numeral NUMERAL="3"
           AssignStmt
-            IdDecl ID="y"
+            IdUse ID="y"
             GeExpr
               AddExpr
                 IdUse ID="x"
@@ -30,7 +30,7 @@ Program
                   Numeral NUMERAL="3"
               Numeral NUMERAL="12"
           AssignStmt
-            IdDecl ID="x"
+            IdUse ID="x"
             NeqExpr
               AddExpr
                 PrimaryExpr

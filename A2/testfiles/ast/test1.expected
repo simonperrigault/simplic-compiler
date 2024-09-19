@@ -3,8 +3,7 @@ Program
     FuncDecl
       IdDecl ID="main"
       List
-        FuncDeclParam
-          IdDecl ID="param1"
+        IdDecl ID="param1"
       Block
         List
     FuncDecl
@@ -14,4 +13,3 @@ Program
         List
           ReturnStmt
             Numeral NUMERAL="0"
-
