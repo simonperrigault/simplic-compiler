@@ -98,6 +98,11 @@ aspect PrettyPrint {
         }
     }
     public void WhileStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        out.print("while (");
+        getCondition().prettyPrint(out, ind);
+        out.println(")");
+        getBlock().prettyPrint(out, ind);
     }
     public void ContinueStmt.prettyPrint(PrintStream out, String ind) {
         out.print(ind);
