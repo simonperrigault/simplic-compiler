@@ -45,7 +45,6 @@
 
 %typeof expr = "Expr";
 %typeof numeral = "Expr";
-%typeof arithExpr = "Expr";
 %typeof addExpr = "Expr";
 %typeof subExpr = "Expr";
 %typeof mulExpr = "Expr";
@@ -103,16 +102,14 @@ declList = decl.d {: return new List().add(d); :}
 		;
 
 expr = compExpr
-		| arithExpr
+		| addExpr
 		;
-compExpr = arithExpr.a LE arithExpr.b {: return new LeExpr(a,b); :}
-		| arithExpr.a LT arithExpr.b {: return new LtExpr(a,b); :}
-		| arithExpr.a GE arithExpr.b {: return new GeExpr(a,b); :}
-		| arithExpr.a GT arithExpr.b {: return new GtExpr(a,b); :}
-		| arithExpr.a EQ arithExpr.b {: return new EqExpr(a,b); :}
-		| arithExpr.a NEQ arithExpr.b {: return new NeqExpr(a,b); :}
-		;
-arithExpr = addExpr
+compExpr = addExpr.a LE addExpr.b {: return new LeExpr(a,b); :}
+		| addExpr.a LT addExpr.b {: return new LtExpr(a,b); :}
+		| addExpr.a GE addExpr.b {: return new GeExpr(a,b); :}
+		| addExpr.a GT addExpr.b {: return new GtExpr(a,b); :}
+		| addExpr.a EQ addExpr.b {: return new EqExpr(a,b); :}
+		| addExpr.a NEQ addExpr.b {: return new NeqExpr(a,b); :}
 		;
 addExpr = mulExpr
 		| addExpr.a ADD mulExpr.m {: return new AddExpr(a, m); :}

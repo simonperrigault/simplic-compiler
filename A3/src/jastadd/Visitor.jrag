@@ -9,8 +9,6 @@ aspect Visitor {
         public Object visit(Program node, Object data);
 
         public Object visit(FuncDecl node, Object data);
-        public Object visit(FuncDeclParam node, Object data);
-        public Object visit(FuncParam node, Object data);
 
         public Object visit(IdDecl node, Object data);
         public Object visit(Decl node, Object data);
@@ -60,13 +58,7 @@ aspect Visitor {
     public Object FuncDecl.accept(Visitor visitor, Object data) {
         return visitor.visit(this, data);
     }
-    public Object FuncDeclParam.accept(Visitor visitor, Object data) {
-        return visitor.visit(this, data);
-    }
-    public Object FuncParam.accept(Visitor visitor, Object data) {
-        return visitor.visit(this, data);
-    }
-
+    
     public Object IdDecl.accept(Visitor visitor, Object data) {
         return visitor.visit(this, data);
     }

@@ -29,12 +29,6 @@ public abstract class TraversingVisitor implements Visitor {
     public Object visit(FuncDecl node, Object data) {
         return visitChildren(node, data);
     }
-    public Object visit(FuncDeclParam node, Object data) {
-        return visitChildren(node, data);
-    }
-    public Object visit(FuncParam node, Object data) {
-        return visitChildren(node, data);
-    }
 
     public Object visit(IdDecl node, Object data) {
         return visitChildren(node, data);

@@ -61,27 +61,29 @@ aspect PrettyPrint {
     public void FuncDecl.prettyPrint(PrintStream out, String ind) {
         out.print("int ");
         getFuncName().prettyPrint(out, ind);
-        out.println("(");
-        for (FuncDeclParam param : getParamListList()) {
-            out.print(ind+"    ");
-            param.prettyPrint(out, ind+"    ");
-            out.println();
+        out.print("(");
+        if (getNumParamList() >= 1) {
+            for (int i = 0; i < getNumParamList()-1; i++) {
+                out.print("int ");
+                getParamList(i).prettyPrint(out, ind+"    ");
+                out.print(", ");
+            }
+            out.print("int ");
+            getParamList(getNumParamList()-1).prettyPrint(out, ind);
         }
         out.println(")");
         getBlock().prettyPrint(out, ind);
-    }
-    public void FuncDeclParam.prettyPrint(PrintStream out, String ind) {
-        out.print("int ");
-        getParamName().prettyPrint(out, ind);
-    }
-    public void FuncParam.prettyPrint(PrintStream out, String ind) {
     }
 
     public void IdDecl.prettyPrint(PrintStream out, String ind) {
         out.print(getID());
     }
     public void Decl.prettyPrint(PrintStream out, String ind) {
-        
+        getIdDecl().prettyPrint(out, ind);
+        if (hasExpr()) {
+            out.print(" = ");
+            getExpr().prettyPrint(out, ind);
+        }
     }
 
     public void Block.prettyPrint(PrintStream out, String ind) {
@@ -94,8 +96,22 @@ aspect PrettyPrint {
         out.println("}");
     }
     public void ReturnStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        out.print("return ");
+        getExpr().prettyPrint(out, ind);
+        out.println(";");
     }
     public void DeclStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        out.print("int ");
+        if (getNumDecl() >= 1) {
+            for (int i = 0; i < getNumDecl()-1; i++) {
+                getDecl(i).prettyPrint(out, ind+"    ");
+                out.print(", ");
+            }
+            getDecl(getNumDecl()-1).prettyPrint(out, ind);
+        }
+        out.println(";");
     }
     public void AssignStmt.prettyPrint(PrintStream out, String ind) {
     }

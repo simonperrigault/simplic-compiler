@@ -1,6 +1,10 @@
-int main(
-    int a
-    int b
-)
+int main(int a, int b)
 {
 }
+int main2()
+{
+}
+int main3(int c)
+{
+}
+
