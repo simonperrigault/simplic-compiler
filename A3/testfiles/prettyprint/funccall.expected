@@ -1,0 +1,10 @@
+int main()
+{
+    int a = 2;
+    continue;
+    break;
+    int b = read();
+    b = read(a);
+    b = read(a, b);
+}
+

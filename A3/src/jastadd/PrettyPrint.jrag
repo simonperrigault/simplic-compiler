@@ -114,16 +114,28 @@ aspect PrettyPrint {
         out.println(";");
     }
     public void AssignStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        getIdUse().prettyPrint(out, ind);
+        out.print(" = ");
+        getExpr().prettyPrint(out, ind);
+        out.println(";");
     }
     public void FuncCallStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        getFuncCall().prettyPrint(out, ind);
+        out.println(";");
     }
     public void IfStmt.prettyPrint(PrintStream out, String ind) {
     }
     public void WhileStmt.prettyPrint(PrintStream out, String ind) {
     }
     public void ContinueStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        out.println("continue;");
     }
     public void BreakStmt.prettyPrint(PrintStream out, String ind) {
+        out.print(ind);
+        out.println("break;");
     }
 
     public void LtExpr.prettyPrint(PrintStream out, String ind) {
@@ -154,6 +166,16 @@ aspect PrettyPrint {
     public void PrimaryExpr.prettyPrint(PrintStream out, String ind) {
     }
     public void FuncCall.prettyPrint(PrintStream out, String ind) {
+        getFuncName().prettyPrint(out, ind);
+        out.print("(");
+        if (getNumParamList() >= 1) {
+            for (int i = 0; i < getNumParamList()-1; i++) {
+                getParamList(i).prettyPrint(out, ind+"    ");
+                out.print(", ");
+            }
+            getParamList(getNumParamList()-1).prettyPrint(out, ind);
+        }
+        out.print(")");
     }
     public void Numeral.prettyPrint(PrintStream out, String ind) {
         out.print(getNUMERAL());
