@@ -21,19 +21,21 @@ public class TestPrettyPrinting {
     private static final File TEST_DIRECTORY = new File("testfiles/prettyprint");
 
     private final String filename;
+
     public TestPrettyPrinting(String testFile) {
         filename = testFile;
     }
 
-    @Test public void runTest() throws Exception {
+    @Test
+    public void runTest() throws Exception {
         try (ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 PrintStream outStream = new PrintStream(bytes)) {
-          Program program = (Program) Util.parse(new File(TEST_DIRECTORY, filename));
+            Program program = (Program) Util.parse(new File(TEST_DIRECTORY, filename));
             program.prettyPrint(outStream);
-      String actual = bytes.toString();
+            String actual = bytes.toString();
             Util.compareOutput(actual,
-                  new File(TEST_DIRECTORY, Util.changeExtension(filename, ".out")),
-                  new File(TEST_DIRECTORY, Util.changeExtension(filename, ".expected")));
+                    new File(TEST_DIRECTORY, Util.changeExtension(filename, ".out")),
+                    new File(TEST_DIRECTORY, Util.changeExtension(filename, ".expected")));
         }
     }
 

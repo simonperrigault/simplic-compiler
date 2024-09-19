@@ -14,3 +14,8 @@ int b() {
         int a = b;
     }
 }
+
+int c(int param) {
+    int a = param;
+    param = 12;
+}
