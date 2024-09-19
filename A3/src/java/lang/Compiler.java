@@ -34,9 +34,12 @@ public class Compiler {
                 return;
             }
             Program program = parse(args);
-            System.out.println("MSN : " + MSNVisitor.result(program));
-            program.prettyPrint(System.out);
-            // System.out.println("Found interactive statement(s): " + CheckInteractiveVisitor.result(program));
+            program.dumpTree(System.out);
+            // System.out.println("MSN : " + MSNVisitor.result(program));
+            // program.prettyPrint(System.out);
+            if (!program.checkNames(System.err)) {
+                System.exit(1);
+            }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
             System.exit(1);
