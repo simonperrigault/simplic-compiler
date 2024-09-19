@@ -3,10 +3,8 @@ Program
     FuncDecl
       IdDecl ID="gcd1"
       List
-        FuncDeclParam
-          IdDecl ID="a"
-        FuncDeclParam
-          IdDecl ID="b"
+        IdDecl ID="a"
+        IdDecl ID="b"
       Block
         List
           WhileStmt
@@ -22,7 +20,7 @@ Program
                   Block
                     List
                       AssignStmt
-                        IdDecl ID="a"
+                        IdUse ID="a"
                         SubExpr
                           IdUse ID="a"
                           IdUse ID="b"
@@ -30,7 +28,7 @@ Program
                     Block
                       List
                         AssignStmt
-                          IdDecl ID="b"
+                          IdUse ID="b"
                           SubExpr
                             IdUse ID="b"
                             IdUse ID="a"
@@ -39,10 +37,8 @@ Program
     FuncDecl
       IdDecl ID="gcd2"
       List
-        FuncDeclParam
-          IdDecl ID="a"
-        FuncDeclParam
-          IdDecl ID="b"
+        IdDecl ID="a"
+        IdDecl ID="b"
       Block
         List
           IfStmt
@@ -58,12 +54,10 @@ Program
             FuncCall
               IdUse ID="gcd2"
               List
-                FuncParam
+                IdUse ID="b"
+                ModExpr
+                  IdUse ID="a"
                   IdUse ID="b"
-                FuncParam
-                  ModExpr
-                    IdUse ID="a"
-                    IdUse ID="b"
     FuncDecl
       IdDecl ID="main"
       List
@@ -80,12 +74,12 @@ Program
                 IdDecl ID="b"
                 Opt
           AssignStmt
-            IdDecl ID="a"
+            IdUse ID="a"
             FuncCall
               IdUse ID="read"
               List
           AssignStmt
-            IdDecl ID="b"
+            IdUse ID="b"
             FuncCall
               IdUse ID="read"
               List
@@ -93,26 +87,20 @@ Program
             FuncCall
               IdUse ID="print"
               List
-                FuncParam
-                  FuncCall
-                    IdUse ID="gcd1"
-                    List
-                      FuncParam
-                        IdUse ID="a"
-                      FuncParam
-                        IdUse ID="b"
+                FuncCall
+                  IdUse ID="gcd1"
+                  List
+                    IdUse ID="a"
+                    IdUse ID="b"
           FuncCallStmt
             FuncCall
               IdUse ID="print"
               List
-                FuncParam
-                  FuncCall
-                    IdUse ID="gcd2"
-                    List
-                      FuncParam
-                        IdUse ID="a"
-                      FuncParam
-                        IdUse ID="b"
+                FuncCall
+                  IdUse ID="gcd2"
+                  List
+                    IdUse ID="a"
+                    IdUse ID="b"
           DeclStmt
             List
               Decl
@@ -122,23 +110,17 @@ Program
                     FuncCall
                       IdUse ID="gcd1"
                       List
-                        FuncParam
-                          IdUse ID="a"
-                        FuncParam
-                          IdUse ID="b"
+                        IdUse ID="a"
+                        IdUse ID="b"
                     FuncCall
                       IdUse ID="gcd2"
                       List
-                        FuncParam
-                          IdUse ID="a"
-                        FuncParam
-                          IdUse ID="b"
+                        IdUse ID="a"
+                        IdUse ID="b"
           FuncCallStmt
             FuncCall
               IdUse ID="print"
               List
-                FuncParam
-                  IdUse ID="diff"
+                IdUse ID="diff"
           ReturnStmt
             Numeral NUMERAL="0"
-
