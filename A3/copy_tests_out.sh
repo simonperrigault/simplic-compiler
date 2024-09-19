@@ -11,3 +11,7 @@ done
 for file in testfiles/visitor/*.out; do
     cp $file testfiles/visitor/$(basename $file .out).expected
 done
+
+for file in testfiles/nameanalysis/*.out; do
+    cp $file testfiles/nameanalysis/$(basename $file .out).expected
+done
