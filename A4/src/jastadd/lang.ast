@@ -1,0 +1,35 @@
+Program ::= FuncDecl*;
+FuncDecl ::= FuncName:IdDecl ParamList:IdDecl* Block;
+
+Decl ::= IdDecl [Expr];
+IdDecl ::= <ID>;
+
+abstract Stmt;
+Block : Stmt ::= Stmt*;
+ReturnStmt : Stmt ::= Expr;
+DeclStmt : Stmt ::= Decl*;
+AssignStmt : Stmt ::= IdUse Expr;
+FuncCallStmt : Stmt ::= FuncCall;
+IfStmt : Stmt ::= Condition:Expr Block [ElseBlock:Block];
+WhileStmt : Stmt ::= Condition:Expr Block;
+ContinueStmt : Stmt;
+BreakStmt : Stmt;
+
+abstract Expr;
+abstract BinaryExpr : Expr ::= Left:Expr Right:Expr;
+LtExpr : BinaryExpr;
+LeExpr : BinaryExpr;
+GtExpr : BinaryExpr;
+GeExpr : BinaryExpr;
+EqExpr : BinaryExpr;
+NeqExpr : BinaryExpr;
+AddExpr : BinaryExpr;
+SubExpr : BinaryExpr;
+MulExpr : BinaryExpr;
+DivExpr : BinaryExpr;
+ModExpr : BinaryExpr;
+OppExpr : Expr ::= Expr;
+PrimaryExpr : Expr ::= Expr;
+FuncCall : Expr ::= FuncName:IdUse ParamList:Expr*;
+Numeral : Expr ::= <NUMERAL>;
+IdUse : Expr ::= <ID>;

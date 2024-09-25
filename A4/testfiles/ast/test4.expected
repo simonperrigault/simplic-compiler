@@ -1,0 +1,43 @@
+Program
+  List
+    FuncDecl
+      IdDecl ID="main"
+      List
+      Block
+        List
+          DeclStmt
+            List
+              Decl
+                IdDecl ID="x"
+                Opt
+          DeclStmt
+            List
+              Decl
+                IdDecl ID="y"
+                Opt
+          AssignStmt
+            IdUse ID="x"
+            LtExpr
+              IdUse ID="x"
+              Numeral NUMERAL="3"
+          AssignStmt
+            IdUse ID="y"
+            GeExpr
+              AddExpr
+                IdUse ID="x"
+                MulExpr
+                  IdUse ID="y"
+                  Numeral NUMERAL="3"
+              Numeral NUMERAL="12"
+          AssignStmt
+            IdUse ID="x"
+            NeqExpr
+              AddExpr
+                PrimaryExpr
+                  EqExpr
+                    MulExpr
+                      IdUse ID="x"
+                      Numeral NUMERAL="3"
+                    IdUse ID="y"
+                Numeral NUMERAL="3"
+              Numeral NUMERAL="1"
