@@ -36,10 +36,8 @@ public class Compiler {
             Program program = parse(args);
             program.dumpTree(System.out);
             // System.out.println("MSN : " + MSNVisitor.result(program));
-            // program.prettyPrint(System.out);
-            if (!program.checkNames(System.err)) {
-                System.exit(1);
-            }
+            program.prettyPrint(System.out);
+            
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
             System.exit(1);

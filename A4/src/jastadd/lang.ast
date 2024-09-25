@@ -3,6 +3,7 @@ FuncDecl ::= FuncName:IdDecl ParamList:IdDecl* Block;
 
 Decl ::= IdDecl [Expr];
 IdDecl ::= <ID>;
+UnknownDecl : IdDecl;
 
 abstract Stmt;
 Block : Stmt ::= Stmt*;
