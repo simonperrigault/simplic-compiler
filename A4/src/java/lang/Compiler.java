@@ -34,7 +34,7 @@ public class Compiler {
                 return;
             }
             Program program = parse(args);
-            program.dumpTree(System.out);
+            // program.dumpTree(System.out);
             // System.out.println("MSN : " + MSNVisitor.result(program));
             program.prettyPrint(System.out);
             

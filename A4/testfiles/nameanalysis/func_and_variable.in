@@ -4,6 +4,6 @@ int b() {
 
 int main() {
     int b = 2;
-    int a = b(); // error but seen in next assignments
+    int a = b();
     return 0;
 }

@@ -1,43 +1,56 @@
 aspect NameAnalysis {
-    syn IdDecl IdUse.decl() = lookup(getID());
-    inh IdDecl IdUse.lookup(String name);
-    
-    inh IdDecl Stmt.lookup(String name);
+    syn nta List<FuncDecl> Program.predefinedFunctions() {
+        List<FuncDecl> list = new List<FuncDecl>();
+        // Create objects of type FunctionDecl and add them to the list
+        list.add(new FuncDecl(new IdDecl("print"), new List<IdDecl>(), new Block()));
+        list.add(new FuncDecl(new IdDecl("read"), new List<IdDecl>(), new Block()));
+        return list;
+    }
 
-    syn IdDecl Stmt.localLookup(String name, int until) {
+    syn IdDecl IdUse.decl() = lookup(getID(), -1);
+    inh IdDecl IdUse.lookup(String name, int untilDecl);
+    
+    inh IdDecl Stmt.lookup(String name, int untilDecl);
+
+    syn IdDecl Stmt.localLookup(String name, int untilDecl) {
         return unknownDecl();
     }
-    syn IdDecl DeclStmt.localLookup(String name, int until) {
-        if (until == -1) {
-            until = getNumDecl()-1;
+    syn IdDecl DeclStmt.localLookup(String name, int untilDecl) {
+        if (untilDecl == -1) {
+            untilDecl = getNumDecl();
         }
-        for (int i = 0; i <= until; i++) {
+        for (int i = 0; i < untilDecl; i++) {
             if (getDecl(i).getIdDecl().getID().equals(name)) {
                 return getDecl(i).getIdDecl();
             }
         }
         return unknownDecl();
     }
-    eq DeclStmt.getDecl(int index).lookup(String name) {
+    eq DeclStmt.getDecl(int index).lookup(String name, int untilDecl) {
         IdDecl decl = localLookup(name, index);
-        return !decl.isUnknown() ? decl : lookup(name);
+        return !decl.isUnknown() ? decl : lookup(name, index);
     }
 
-    syn IdDecl Block.localLookup(String name, int until) {
-        for (int i = 0; i <= until; i++) {
-            IdDecl res = getStmt(i).localLookup(name, -1);
+    syn IdDecl Block.localLookup(String name, int untilStmt, int untilDecl) {
+        IdDecl res;
+        for (int i = 0; i < untilStmt; i++) {
+            res = getStmt(i).localLookup(name, -1);
             if (!res.isUnknown()) {
                 return res;
             }
         }
+        res = getStmt(untilStmt).localLookup(name, untilDecl+1);
+        if (!res.isUnknown()) {
+            return res;
+        }
         return unknownDecl();
     }
-    eq Block.getStmt(int index).lookup(String name) {
-        IdDecl decl = localLookup(name, index);
-        return !decl.isUnknown() ? decl : lookup(name);
+    eq Block.getStmt(int index).lookup(String name, int untilDecl) {
+        IdDecl decl = localLookup(name, index, untilDecl);
+        return !decl.isUnknown() ? decl : lookup(name, untilDecl);
     }
 
-    inh IdDecl FuncDecl.lookup(String name);
+    inh IdDecl FuncDecl.lookup(String name, int untilDecl);
     syn IdDecl FuncDecl.localLookup(String name) {
         for (IdDecl idDecl : getParamListList()) {
             if (idDecl.getID().equals(name)) {
@@ -46,9 +59,9 @@ aspect NameAnalysis {
         }
         return unknownDecl();
     }
-    eq FuncDecl.getChild().lookup(String name) {
+    eq FuncDecl.getChild().lookup(String name, int untilDecl) {
         IdDecl decl = localLookup(name);
-        return !decl.isUnknown() ? decl : lookup(name);
+        return !decl.isUnknown() ? decl : lookup(name, untilDecl);
     }
 
     syn IdDecl Program.localLookup(String name) {
@@ -59,21 +72,20 @@ aspect NameAnalysis {
         }
         return unknownDecl();
     }
-    eq Program.getChild().lookup(String name) {
+    eq Program.getChild().lookup(String name, int untilDecl) {
         IdDecl decl = localLookup(name);
         return !decl.isUnknown() ? decl : unknownDecl();
     }
 
-    inh IdDecl IdDecl.lookup(String name);
-    syn boolean IdDecl.isMultiDeclared() = lookup(getID()) != this;
+    inh IdDecl IdDecl.lookup(String name, int idDecl);
+    syn boolean IdDecl.isMultiDeclared() = lookup(getID(), -1) != this;
 }
 
 aspect CircularDefinitions {
-    /* Identify circular definitions in let expressions */
     syn boolean IdUse.isCircular() = inExprOf(decl());
     inh boolean IdUse.inExprOf(IdDecl idDecl);
+    inh boolean Decl.inExprOf(IdDecl idDecl);
 
-    eq Decl.getExpr().inExprOf(IdDecl idDecl) {
-        return getIdDecl() == idDecl;
-    }
+    eq Decl.getExpr().inExprOf(IdDecl idDecl) = getIdDecl() == idDecl || inExprOf(idDecl);
+    eq Program.getChild().inExprOf(IdDecl idDecl) = false;
 }
