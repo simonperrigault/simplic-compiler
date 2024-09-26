@@ -2,13 +2,29 @@ aspect NameAnalysis {
     syn nta List<FuncDecl> Program.predefinedFunctions() {
         List<FuncDecl> list = new List<FuncDecl>();
         // Create objects of type FunctionDecl and add them to the list
-        list.add(new FuncDecl(new IdDecl("print"), new List<IdDecl>(), new Block()));
-        list.add(new FuncDecl(new IdDecl("read"), new List<IdDecl>(), new Block()));
+        list.add(new FuncDecl(new IdDecl("print"), new List<IdDecl>(new IdDecl("text")), new Block()));
+        list.add(new FuncDecl(new IdDecl("read"), new List<IdDecl>(new IdDecl("variable")), new Block()));
         return list;
     }
+    eq Program.getChild().predefinedFunctions() = predefinedFunctions();
 
     syn IdDecl IdUse.decl() = lookup(getID(), -1);
     inh IdDecl IdUse.lookup(String name, int untilDecl);
+
+    inh List<FuncDecl> FuncCall.predefinedFunctions();
+    inh IdDecl FuncCall.lookup(String name, int untilDecl);
+    syn IdDecl FuncCall.localLookup(String name) {
+        for (FuncDecl funcDecl : predefinedFunctions()) {
+            if (funcDecl.getFuncName().getID().equals(name)) {
+                return funcDecl.getFuncName();
+            }
+        }
+        return unknownDecl();
+    }
+    eq FuncCall.getChild().lookup(String name, int untilDecl) {
+        IdDecl decl = localLookup(name);
+        return !decl.isUnknown() ? decl : lookup(name, untilDecl);
+    }
     
     inh IdDecl Stmt.lookup(String name, int untilDecl);
 
@@ -88,4 +104,18 @@ aspect CircularDefinitions {
 
     eq Decl.getExpr().inExprOf(IdDecl idDecl) = getIdDecl() == idDecl || inExprOf(idDecl);
     eq Program.getChild().inExprOf(IdDecl idDecl) = false;
+}
+
+aspect FuncAndVariable {
+    inh boolean IdDecl.isFunction();
+    eq Decl.getIdDecl().isFunction() = false;
+    eq FuncDecl.getFuncName().isFunction() = true;
+
+    inh boolean IdUse.isFunction();
+    eq Program.getChild().isFunction() = false;
+    eq FuncCall.getFuncName().isFunction() = true;
+
+    syn boolean IdUse.isBadFuncOrVar() {
+        return isFunction() != decl().isFunction() && !decl().isUnknown();
+    }
 }
