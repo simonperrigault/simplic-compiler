@@ -6,6 +6,11 @@ Decl ::= IdDecl [Expr];
 IdDecl ::= <ID>;
 UnknownDecl : IdDecl;
 
+abstract Type;
+IntType: Type;
+BoolType: Type;
+UnknownType: Type;
+
 abstract Stmt;
 Block : Stmt ::= Stmt*;
 ReturnStmt : Stmt ::= Expr;

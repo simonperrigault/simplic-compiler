@@ -15,3 +15,7 @@ done
 for file in testfiles/nameanalysis/*.out; do
     cp $file testfiles/nameanalysis/$(basename $file .out).expected
 done
+
+for file in testfiles/typeanalysis/*.out; do
+    cp $file testfiles/typeanalysis/$(basename $file .out).expected
+done
