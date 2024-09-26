@@ -7,3 +7,13 @@ aspect UnknownDecl {
     syn boolean IdDecl.isUnknown() = false;
     eq UnknownDecl.isUnknown() = true;
 }
+
+aspect UnknownFuncDecl {
+    syn nta UnknownFuncDecl Program.unknownFuncDecl() = new UnknownFuncDecl();
+    
+    inh UnknownFuncDecl ASTNode.unknownFuncDecl();
+    eq Program.getChild().unknownFuncDecl() = unknownFuncDecl();
+    
+    syn boolean FuncDecl.isUnknown() = false;
+    eq UnknownFuncDecl.isUnknown() = true;
+}

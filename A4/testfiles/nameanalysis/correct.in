@@ -5,11 +5,11 @@ int main() {
 }
 
 int b() {
-    main();
-    read();
-    print();
     int a;
     int b;
+    main();
+    a = read();
+    print(a);
     {
         int a = b;
     }

@@ -50,4 +50,8 @@ aspect ErrorContributions {
     IdUse contributes error("symbol '" + getID() + "' is a variable but declared as a function call")
         when isBadFuncOrVar() && !isFunction()
         to Program.errors() for program();
+    
+    IdUse contributes error("funcCall '" + getID() + "' has not the good number of parameters")
+        when wrongNumberParameters()
+        to Program.errors() for program();
 }

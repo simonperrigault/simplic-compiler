@@ -1,5 +1,6 @@
 Program ::= FuncDecl*;
 FuncDecl ::= FuncName:IdDecl ParamList:IdDecl* Block;
+UnknownFuncDecl : FuncDecl;
 
 Decl ::= IdDecl [Expr];
 IdDecl ::= <ID>;

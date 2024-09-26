@@ -3,7 +3,7 @@ aspect NameAnalysis {
         List<FuncDecl> list = new List<FuncDecl>();
         // Create objects of type FunctionDecl and add them to the list
         list.add(new FuncDecl(new IdDecl("print"), new List<IdDecl>(new IdDecl("text")), new Block()));
-        list.add(new FuncDecl(new IdDecl("read"), new List<IdDecl>(new IdDecl("variable")), new Block()));
+        list.add(new FuncDecl(new IdDecl("read"), new List<IdDecl>(), new Block()));
         return list;
     }
     eq Program.getChild().predefinedFunctions() = predefinedFunctions();
@@ -117,5 +117,29 @@ aspect FuncAndVariable {
 
     syn boolean IdUse.isBadFuncOrVar() {
         return isFunction() != decl().isFunction() && !decl().isUnknown();
+    }
+}
+
+aspect ParametersNumber {
+    syn FuncDecl IdUse.function() = lookupFunc(getID());
+    inh FuncDecl IdUse.lookupFunc(String name);
+    eq Program.getChild().lookupFunc(String name) {
+        for (FuncDecl funcDecl : predefinedFunctions()) {
+            if (funcDecl.getFuncName().getID().equals(name)) {
+                return funcDecl;
+            }
+        }
+        for (FuncDecl funcDecl : getFuncDeclList()) {
+            if (funcDecl.getFuncName().getID().equals(name)) {
+                return funcDecl;
+            }
+        }
+        return unknownFuncDecl();
+    }
+
+    inh boolean IdUse.wrongNumberParameters();
+    eq Program.getChild().wrongNumberParameters() = false;
+    eq FuncCall.getFuncName().wrongNumberParameters() {
+        return getNumParamList() != getFuncName().function().getNumParamList();
     }
 }
