@@ -56,7 +56,7 @@ aspect NameAnalysis {
     /**
      * @param err where to write error messages
      */
-    public Boolean Program.checkNames(PrintStream err) {
+    public boolean Program.checkNames(PrintStream err) {
         SymbolTable symbols = new SymbolTable();
         return checkNames(err, symbols);
     }
@@ -64,16 +64,16 @@ aspect NameAnalysis {
      * @param err where to write error messages
      * @param symbols symbol table
      */
-    public Boolean ASTNode.checkNames(PrintStream err, SymbolTable symbols) {
-        Boolean result = true;
+    public boolean ASTNode.checkNames(PrintStream err, SymbolTable symbols) {
+        boolean result = true;
         for (ASTNode child : astChildren()) {
             result &= child.checkNames(err, symbols);
         }
         return result;
     }
 
-    public Boolean FuncDecl.checkNames(PrintStream err, SymbolTable symbols) {
-        Boolean result = true;
+    public boolean FuncDecl.checkNames(PrintStream err, SymbolTable symbols) {
+        boolean result = true;
         result &= getFuncName().checkNames(err, symbols);
         symbols = symbols.push();
         for (IdDecl decl : getParamListList()) {
@@ -85,16 +85,16 @@ aspect NameAnalysis {
         return result;
     }
 
-    public Boolean Block.checkNames(PrintStream err, SymbolTable symbols) {
+    public boolean Block.checkNames(PrintStream err, SymbolTable symbols) {
         symbols = symbols.push();
-        Boolean result = true;
+        boolean result = true;
         for (Stmt stmt : getStmtList()) {
             result &= stmt.checkNames(err, symbols);
         }
         return result;
     }
 
-    public Boolean IdDecl.checkNames(PrintStream err, SymbolTable symbols) {
+    public boolean IdDecl.checkNames(PrintStream err, SymbolTable symbols) {
         if (!symbols.declare(getID())) {
             err.format("Error at line %d:%d : symbol \'%s\' is already declared!", getLine(), getColumn(), getID());
             err.println();
@@ -102,7 +102,7 @@ aspect NameAnalysis {
         }
         return true;
     }
-    public Boolean IdUse.checkNames(PrintStream err, SymbolTable symbols) {
+    public boolean IdUse.checkNames(PrintStream err, SymbolTable symbols) {
         if (!symbols.lookup(getID())) {
             err.format("Error at line %d:%d : symbol \'%s\' has not been declared before this use!", getLine(), getColumn(), getID());
             err.println();

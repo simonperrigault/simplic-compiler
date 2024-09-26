@@ -3,12 +3,7 @@ aspect MinValue {
     syn int Node.localMin();
     eq Leaf.localMin() = getNumber();
     eq Pair.localMin() {
-        if (getLeft().localMin() < getRight().localMin()) {
-            return getLeft().localMin();
-        }
-        else {
-            return getRight().localMin();
-        }
+        return Math.min(getLeft().localMin(), getRight().localMin());
     }
 
     // Exercise 2
@@ -17,10 +12,7 @@ aspect MinValue {
 
     // Exercise 3
     syn boolean Leaf.isMinValue() {
-        if (localMin() == globalMin()) {
-            return true;
-        }
-        return false;
+        return localMin() == globalMin();
     }
     
     // Exercise 4
