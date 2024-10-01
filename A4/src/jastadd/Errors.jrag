@@ -51,7 +51,7 @@ aspect ErrorContributions {
         when isBadFuncOrVar() && !isFunction()
         to Program.errors() for program();
     
-    IdUse contributes error("funcCall '" + getID() + "' has not the good number of parameters")
+    IdUse contributes error("funcCall '" + getID() + "' has not the right number of parameters")
         when wrongNumberParameters()
         to Program.errors() for program();
 
