@@ -1,0 +1,145 @@
+aspect NameAnalysis {
+    syn nta List<FuncDecl> Program.predefinedFunctions() {
+        List<FuncDecl> list = new List<FuncDecl>();
+        // Create objects of type FunctionDecl and add them to the list
+        list.add(new FuncDecl(new IdDecl("print"), new List<IdDecl>(new IdDecl("text")), new Block()));
+        list.add(new FuncDecl(new IdDecl("read"), new List<IdDecl>(), new Block()));
+        return list;
+    }
+    eq Program.getChild().predefinedFunctions() = predefinedFunctions();
+
+    syn IdDecl IdUse.decl() = lookup(getID(), -1);
+    inh IdDecl IdUse.lookup(String name, int untilDecl);
+
+    inh List<FuncDecl> FuncCall.predefinedFunctions();
+    inh IdDecl FuncCall.lookup(String name, int untilDecl);
+    syn IdDecl FuncCall.localLookup(String name) {
+        for (FuncDecl funcDecl : predefinedFunctions()) {
+            if (funcDecl.getFuncName().getID().equals(name)) {
+                return funcDecl.getFuncName();
+            }
+        }
+        return unknownDecl();
+    }
+    eq FuncCall.getChild().lookup(String name, int untilDecl) {
+        IdDecl decl = localLookup(name);
+        return !decl.isUnknown() ? decl : lookup(name, untilDecl);
+    }
+    
+    inh IdDecl Stmt.lookup(String name, int untilDecl);
+
+    syn IdDecl Stmt.localLookup(String name, int untilDecl) {
+        return unknownDecl();
+    }
+    syn IdDecl DeclStmt.localLookup(String name, int untilDecl) {
+        if (untilDecl == -1) {
+            untilDecl = getNumDecl();
+        }
+        for (int i = 0; i < untilDecl; i++) {
+            if (getDecl(i).getIdDecl().getID().equals(name)) {
+                return getDecl(i).getIdDecl();
+            }
+        }
+        return unknownDecl();
+    }
+    eq DeclStmt.getDecl(int index).lookup(String name, int untilDecl) {
+        IdDecl decl = localLookup(name, index);
+        return !decl.isUnknown() ? decl : lookup(name, index);
+    }
+
+    syn IdDecl Block.localLookup(String name, int untilStmt, int untilDecl) {
+        IdDecl res;
+        for (int i = 0; i < untilStmt; i++) {
+            res = getStmt(i).localLookup(name, -1);
+            if (!res.isUnknown()) {
+                return res;
+            }
+        }
+        res = getStmt(untilStmt).localLookup(name, untilDecl+1);
+        if (!res.isUnknown()) {
+            return res;
+        }
+        return unknownDecl();
+    }
+    eq Block.getStmt(int index).lookup(String name, int untilDecl) {
+        IdDecl decl = localLookup(name, index, untilDecl);
+        return !decl.isUnknown() ? decl : lookup(name, untilDecl);
+    }
+
+    inh IdDecl FuncDecl.lookup(String name, int untilDecl);
+    syn IdDecl FuncDecl.localLookup(String name) {
+        for (IdDecl idDecl : getParamListList()) {
+            if (idDecl.getID().equals(name)) {
+                return idDecl;
+            }
+        }
+        return unknownDecl();
+    }
+    eq FuncDecl.getChild().lookup(String name, int untilDecl) {
+        IdDecl decl = localLookup(name);
+        return !decl.isUnknown() ? decl : lookup(name, untilDecl);
+    }
+
+    syn IdDecl Program.localLookup(String name) {
+        for (FuncDecl func : getFuncDeclList()) {
+            if (func.getFuncName().getID().equals(name)) {
+                return func.getFuncName();
+            }
+        }
+        return unknownDecl();
+    }
+    eq Program.getChild().lookup(String name, int untilDecl) {
+        IdDecl decl = localLookup(name);
+        return !decl.isUnknown() ? decl : unknownDecl();
+    }
+
+    inh IdDecl IdDecl.lookup(String name, int idDecl);
+    syn boolean IdDecl.isMultiDeclared() = lookup(getID(), -1) != this;
+}
+
+aspect CircularDefinitions {
+    syn boolean IdUse.isCircular() = inExprOf(decl());
+    inh boolean IdUse.inExprOf(IdDecl idDecl);
+    inh boolean Decl.inExprOf(IdDecl idDecl);
+
+    eq Decl.getExpr().inExprOf(IdDecl idDecl) = getIdDecl() == idDecl || inExprOf(idDecl);
+    eq Program.getChild().inExprOf(IdDecl idDecl) = false;
+}
+
+aspect FuncAndVariable {
+    inh boolean IdDecl.isFunction();
+    eq Decl.getIdDecl().isFunction() = false;
+    eq FuncDecl.getFuncName().isFunction() = true;
+
+    inh boolean IdUse.isFunction();
+    eq Program.getChild().isFunction() = false;
+    eq FuncCall.getFuncName().isFunction() = true;
+
+    syn boolean IdUse.isBadFuncOrVar() {
+        return isFunction() != decl().isFunction() && !decl().isUnknown();
+    }
+}
+
+aspect ParametersNumber {
+    syn FuncDecl IdUse.function() = lookupFunc(getID());
+    inh FuncDecl IdUse.lookupFunc(String name);
+    eq Program.getChild().lookupFunc(String name) {
+        for (FuncDecl funcDecl : predefinedFunctions()) {
+            if (funcDecl.getFuncName().getID().equals(name)) {
+                return funcDecl;
+            }
+        }
+        for (FuncDecl funcDecl : getFuncDeclList()) {
+            if (funcDecl.getFuncName().getID().equals(name)) {
+                return funcDecl;
+            }
+        }
+        return unknownFuncDecl();
+    }
+
+    inh boolean IdUse.wrongNumberParameters();
+    eq Program.getChild().wrongNumberParameters() = false;
+    eq FuncCall.getFuncName().wrongNumberParameters() {
+        return getNumParamList() != getFuncName().function().getNumParamList();
+    }
+}

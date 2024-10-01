@@ -1,0 +1,81 @@
+aspect TypeAnalysis {
+    syn nta IntType Program.intType() = new IntType();
+    syn nta BoolType Program.boolType() = new BoolType();
+    syn nta UnknownType Program.unknownType() = new UnknownType();
+
+    inh IntType ASTNode.intType();
+    inh BoolType ASTNode.boolType();
+    inh UnknownType ASTNode.unknownType();
+    eq Program.getChild().intType() = intType();
+    eq Program.getChild().boolType() = boolType();
+    eq Program.getChild().unknownType() = unknownType();
+
+    syn Type IdDecl.type() = intType();
+
+    syn Type Expr.type() = unknownType();
+    eq LtExpr.type() = boolType();
+    eq LeExpr.type() = boolType();
+    eq GtExpr.type() = boolType();
+    eq GeExpr.type() = boolType();
+    eq EqExpr.type() = boolType();
+    eq NeqExpr.type() = boolType();
+
+    eq AddExpr.type() = intType();
+    eq SubExpr.type() = intType();
+    eq MulExpr.type() = intType();
+    eq DivExpr.type() = intType();
+    eq ModExpr.type() = intType();
+    eq OppExpr.type() = intType();
+    eq PrimaryExpr.type() = getExpr().type();
+    eq Numeral.type() = intType();
+    eq FuncCall.type() {
+        if (getFuncName().decl().isUnknown()) {
+            return unknownType();
+        }
+        return intType();
+    }
+    eq IdUse.type() {
+        if (decl().isUnknown()) {
+            return unknownType();
+        }
+        return intType();
+    }
+
+    inh Type Expr.expectedType();
+    eq Decl.getChild().expectedType() = intType();
+    eq ReturnStmt.getChild().expectedType() = intType();
+    eq AssignStmt.getChild().expectedType() = intType();
+    eq FuncCall.getChild().expectedType() = intType();
+    eq FuncCallStmt.getChild().expectedType() = intType();
+    eq BinaryExpr.getChild().expectedType() = intType();
+    eq IfStmt.getCondition().expectedType() = boolType();
+    eq WhileStmt.getCondition().expectedType() = boolType();
+
+    syn boolean Type.compatibleType(Type other) = false;
+    eq UnknownType.compatibleType(Type other) {
+        return true;
+    }
+    eq BoolType.compatibleType(Type other) {
+        if (other == intType()) {
+            return false;
+        }
+        return true;
+    }
+    eq IntType.compatibleType(Type other) {
+        if (other == boolType()) {
+            return false;
+        }
+        return true;
+    }
+
+    syn String Type.toString();
+    eq UnknownType.toString() {
+        return "UnknownType";
+    }
+    eq BoolType.toString() {
+        return "BoolType";
+    }
+    eq IntType.toString() {
+        return "IntType";
+    }
+}
