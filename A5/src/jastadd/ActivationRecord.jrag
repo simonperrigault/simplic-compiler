@@ -14,20 +14,69 @@ aspect ActivationRecord {
 
 
     public void Program.eval() {
+        boolean mainFound = false;
         for (FuncDecl func : getFuncDeclList()) {
             if (func.getFuncName().getID().equals("main")) {
                 func.eval(new ActivationRecord());
+                mainFound = true;
             }
         }
-        throw new RuntimeException();
+        if (!mainFound) {
+            throw new RuntimeException("No main function found");
+        }
     }
     public int FuncDecl.eval(ActivationRecord actrec) {
-        throw new RuntimeException();
+        // evaluate parameters
+
+        // evaluate block
+        getBlock().eval(actrec);
+
+        return 0;
     }
+
     public void Stmt.eval(ActivationRecord actrec) {
         throw new RuntimeException();
     }
+    public void Block.eval(ActivationRecord actrec) {
+        for (Stmt stmt : getStmtList()) {
+            stmt.eval(actrec);
+        }
+    }
+    public void DeclStmt.eval(ActivationRecord actrec) {
+        for (Decl decl : getDeclList()) {
+            decl.eval(actrec);
+        }
+    }
+
+    public void Decl.eval(ActivationRecord actrec) {
+        System.out.println(getExpr().eval(actrec));
+    }
+
     public int Expr.eval(ActivationRecord actrec) {
         throw new RuntimeException();
+    }
+    public int AddExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) + getRight().eval(actrec);
+    }
+    public int SubExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) - getRight().eval(actrec);
+    }
+    public int MulExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) * getRight().eval(actrec);
+    }
+    public int DivExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) / getRight().eval(actrec);
+    }
+    public int ModExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) % getRight().eval(actrec);
+    }
+    public int OppExpr.eval(ActivationRecord actrec) {
+        return -getExpr().eval(actrec);
+    }
+    public int PrimaryExpr.eval(ActivationRecord actrec) {
+        return getExpr().eval(actrec);
+    }
+    public int Numeral.eval(ActivationRecord actrec) {
+        return Integer.parseInt(getNUMERAL());
     }
 }
