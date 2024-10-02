@@ -1,5 +1,16 @@
 import java.util.HashMap;
 
+aspect UniqueName {
+    inh String IdDecl.uniqueName();
+    inh String Stmt.uniqueName();
+
+    eq FuncDecl.getFuncName().uniqueName() = "0_" + getFuncName().getID();
+    eq FuncDecl.getParamList(int i).uniqueName() = "0_" + getParamList(i).getID();
+    eq FuncDecl.getBlock().uniqueName() = "";
+    eq Block.getStmt(int i).uniqueName() = uniqueName() + i + "_";
+    eq DeclStmt.getDecl(int i).uniqueName() = uniqueName() + getDecl(i).getIdDecl().getID();
+}
+
 aspect Interpreter {
     public class ActivationRecord {
         private HashMap<String, Integer> variables = new HashMap<String, Integer>();
@@ -26,12 +37,9 @@ aspect Interpreter {
         }
     }
     public int FuncDecl.eval(ActivationRecord actrec) {
-        // evaluate parameters
-
-        // evaluate block
         getBlock().eval(actrec);
 
-        return 0;
+        return actrec.get("_return");
     }
 
     public void Stmt.eval(ActivationRecord actrec) {
@@ -40,6 +48,9 @@ aspect Interpreter {
     public void Block.eval(ActivationRecord actrec) {
         for (Stmt stmt : getStmtList()) {
             stmt.eval(actrec);
+            if (actrec.get("_mustReturn") == 2) {
+                return;
+            }
         }
     }
     public void DeclStmt.eval(ActivationRecord actrec) {
@@ -51,7 +62,7 @@ aspect Interpreter {
         getFuncCall().eval(actrec);
     }
     public void AssignStmt.eval(ActivationRecord actrec) {
-        actrec.put(getIdUse().getID(), getExpr().eval(actrec));
+        actrec.put(getIdUse().decl().uniqueName(), getExpr().eval(actrec));
     }
     public void IfStmt.eval(ActivationRecord actrec) {
         if (getCondition().eval(actrec) == 1) {
@@ -63,11 +74,21 @@ aspect Interpreter {
     public void WhileStmt.eval(ActivationRecord actrec) {
         while (getCondition().eval(actrec) == 1) {
             getBlock().eval(actrec);
+            if (actrec.get("_mustReturn") == 2) {
+                return;
+            }
         }
     }
+    public void ReturnStmt.eval(ActivationRecord actrec) {
+        actrec.put("_return", getExpr().eval(actrec));
+        actrec.put("_mustReturn", 2);
+    }
+
 
     public void Decl.eval(ActivationRecord actrec) {
-        actrec.put(getIdDecl().getID(), getExpr().eval(actrec));
+        if (hasExpr()) {
+            actrec.put(getIdDecl().uniqueName(), getExpr().eval(actrec));
+        }
     }
 
     public int Expr.eval(ActivationRecord actrec) {
@@ -122,9 +143,16 @@ aspect Interpreter {
             System.out.println(getParamList(0).eval(actrec));
             return 0;
         }
-        throw new RuntimeException("Unknown function: " + getFuncName().getID());
+
+        ActivationRecord newActrec = new ActivationRecord();
+        for (int i = 0; i < getNumParamList(); i++) {
+            newActrec.put(getFuncName().function().getParamList(i).getID(), getParamList(i).eval(actrec));
+        }
+        newActrec.put("_mustReturn", 1);
+        getFuncName().function().getBlock().eval(newActrec);
+        return newActrec.get("_return");
     }
     public int IdUse.eval(ActivationRecord actrec) {
-        return actrec.get(getID());
+        return actrec.get(decl().uniqueName());
     }
 }

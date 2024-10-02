@@ -1,0 +1,10 @@
+int a(int param1, int param2) {
+    print(param1);
+    print(param1 + param2);
+}
+
+int main() {
+    print(1);
+    a(1, 2*4);
+    print(2);
+}
