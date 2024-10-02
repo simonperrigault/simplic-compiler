@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Scanner;
 
 aspect UniqueName {
     inh String IdDecl.uniqueName();
@@ -22,6 +23,8 @@ aspect Interpreter {
             return variables.getOrDefault(name, 0);
         }
     }
+
+    private static Scanner FuncCall.scanner = new Scanner(System.in);
 
 
     public void Program.eval() {
@@ -143,10 +146,17 @@ aspect Interpreter {
             System.out.println(getParamList(0).eval(actrec));
             return 0;
         }
+        if (getFuncName().getID().equals("read")) {
+            try {
+                return scanner.nextInt();
+            } catch (Exception e) {
+                return 0;
+            }
+        }
 
         ActivationRecord newActrec = new ActivationRecord();
         for (int i = 0; i < getNumParamList(); i++) {
-            newActrec.put(getFuncName().function().getParamList(i).getID(), getParamList(i).eval(actrec));
+            newActrec.put(getFuncName().function().getParamList(i).uniqueName(), getParamList(i).eval(actrec));
         }
         newActrec.put("_mustReturn", 1);
         getFuncName().function().getBlock().eval(newActrec);
