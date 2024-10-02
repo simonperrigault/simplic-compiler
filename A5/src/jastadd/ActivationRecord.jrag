@@ -47,6 +47,9 @@ aspect ActivationRecord {
             decl.eval(actrec);
         }
     }
+    public void FuncCallStmt.eval(ActivationRecord actrec) {
+        getFuncCall().eval(actrec);
+    }
 
     public void Decl.eval(ActivationRecord actrec) {
         System.out.println(getExpr().eval(actrec));
@@ -78,5 +81,12 @@ aspect ActivationRecord {
     }
     public int Numeral.eval(ActivationRecord actrec) {
         return Integer.parseInt(getNUMERAL());
+    }
+    public int FuncCall.eval(ActivationRecord actrec) {
+        if (getFuncName().getID().equals("print")) {
+            System.out.println(getParamList(0).eval(actrec));
+            return 0;
+        }
+        throw new RuntimeException("Unknown function: " + getFuncName().getID());
     }
 }

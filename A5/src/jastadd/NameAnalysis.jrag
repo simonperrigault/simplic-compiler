@@ -1,7 +1,7 @@
 aspect NameAnalysis {
     syn nta List<FuncDecl> Program.predefinedFunctions() {
         List<FuncDecl> list = new List<FuncDecl>();
-        // Create objects of type FunctionDecl and add them to the list
+        // Create objects of type FuncDecl and add them to the list
         list.add(new FuncDecl(new IdDecl("print"), new List<IdDecl>(new IdDecl("text")), new Block()));
         list.add(new FuncDecl(new IdDecl("read"), new List<IdDecl>(), new Block()));
         return list;
