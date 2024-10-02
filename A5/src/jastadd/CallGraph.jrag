@@ -11,3 +11,14 @@ aspect CallGraph {
     FuncCall contributes getFuncName().function()
         to FuncDecl.functionCalls() for enclosingFunction();
 }
+
+aspect Reachability {
+    syn Set<FuncDecl> FuncDecl.reachable() circular [new HashSet<FuncDecl>()] {
+        HashSet<FuncDecl> result = new HashSet<FuncDecl>();
+        result.addAll(functionCalls());
+        for (FuncDecl s : functionCalls()) {
+            result.addAll(s.reachable());
+        }
+        return result;
+    }
+}

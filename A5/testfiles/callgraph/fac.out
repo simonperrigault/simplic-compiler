@@ -4,3 +4,6 @@ digraph G {
   f -> fac;
   main -> f;
 }
+fac can reach: { fac }
+f can reach: { print fac }
+main can reach: { print fac f }

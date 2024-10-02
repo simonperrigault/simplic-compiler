@@ -35,6 +35,13 @@ public class TestCallGraph {
             }
         }
         sb.append("}\n");
+        for (FuncDecl f : program.getFuncDeclList()) {
+            sb.append(f.getFuncName().getID() + " can reach: { ");
+            for (FuncDecl reachable : f.reachable()) {
+                sb.append(reachable.getFuncName().getID() + " ");
+            }
+            sb.append("}\n");
+        }
         String actual = sb.toString();
         Util.compareOutput(actual,
                 new File(TEST_DIRECTORY, Util.changeExtension(filename, ".out")),
