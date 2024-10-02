@@ -33,6 +33,14 @@ public class TestInterpreter {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             System.setOut(new PrintStream(baos));
             program.eval();
+            if (!program.errors().isEmpty()) {
+                System.err.println();
+                System.err.println("Errors: ");
+                for (ErrorMessage e: program.errors()) {
+                    System.err.println("- " + e);
+                }
+                System.exit(1);
+            }
             Util.compareOutput(baos.toString(),
                         new File(TEST_DIRECTORY, Util.changeExtension(filename, ".out")),
                         new File(TEST_DIRECTORY, Util.changeExtension(filename, ".expected")));

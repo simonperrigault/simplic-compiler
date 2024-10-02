@@ -1,6 +1,6 @@
 import java.util.HashMap;
 
-aspect ActivationRecord {
+aspect Interpreter {
     public class ActivationRecord {
         private HashMap<String, Integer> variables = new HashMap<String, Integer>();
 
