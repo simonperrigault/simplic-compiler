@@ -1,0 +1,33 @@
+import java.util.HashMap;
+
+aspect ActivationRecord {
+    public class ActivationRecord {
+        private HashMap<String, Integer> variables = new HashMap<String, Integer>();
+
+        public void put(String name, int value) {
+            variables.put(name, value);
+        }
+        public int get(String name) {
+            return variables.get(name);
+        }
+    }
+
+
+    public void Program.eval() {
+        for (FuncDecl func : getFuncDeclList()) {
+            if (func.getFuncName().getID().equals("main")) {
+                func.eval(new ActivationRecord());
+            }
+        }
+        throw new RuntimeException();
+    }
+    public int FuncDecl.eval(ActivationRecord actrec) {
+        throw new RuntimeException();
+    }
+    public void Stmt.eval(ActivationRecord actrec) {
+        throw new RuntimeException();
+    }
+    public int Expr.eval(ActivationRecord actrec) {
+        throw new RuntimeException();
+    }
+}
