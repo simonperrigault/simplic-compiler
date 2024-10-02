@@ -8,7 +8,7 @@ aspect Interpreter {
             variables.put(name, value);
         }
         public int get(String name) {
-            return variables.get(name);
+            return variables.getOrDefault(name, 0);
         }
     }
 
@@ -50,14 +50,49 @@ aspect Interpreter {
     public void FuncCallStmt.eval(ActivationRecord actrec) {
         getFuncCall().eval(actrec);
     }
+    public void AssignStmt.eval(ActivationRecord actrec) {
+        actrec.put(getIdUse().getID(), getExpr().eval(actrec));
+    }
+    public void IfStmt.eval(ActivationRecord actrec) {
+        if (getCondition().eval(actrec) == 1) {
+            getBlock().eval(actrec);
+        } else if (hasElseBlock()) {
+            getElseBlock().eval(actrec);
+        }
+    }
+    public void WhileStmt.eval(ActivationRecord actrec) {
+        while (getCondition().eval(actrec) == 1) {
+            getBlock().eval(actrec);
+        }
+    }
 
     public void Decl.eval(ActivationRecord actrec) {
-        System.out.println(getExpr().eval(actrec));
+        actrec.put(getIdDecl().getID(), getExpr().eval(actrec));
     }
 
     public int Expr.eval(ActivationRecord actrec) {
         throw new RuntimeException();
     }
+
+    public int LtExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) < getRight().eval(actrec) ? 1 : 0;
+    }
+    public int LeExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) <= getRight().eval(actrec) ? 1 : 0;
+    }
+    public int GtExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) > getRight().eval(actrec) ? 1 : 0;
+    }
+    public int GeExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) >= getRight().eval(actrec) ? 1 : 0;
+    }
+    public int EqExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) == getRight().eval(actrec) ? 1 : 0;
+    }
+    public int NeqExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) != getRight().eval(actrec) ? 1 : 0;
+    }
+
     public int AddExpr.eval(ActivationRecord actrec) {
         return getLeft().eval(actrec) + getRight().eval(actrec);
     }
@@ -88,5 +123,8 @@ aspect Interpreter {
             return 0;
         }
         throw new RuntimeException("Unknown function: " + getFuncName().getID());
+    }
+    public int IdUse.eval(ActivationRecord actrec) {
+        return actrec.get(getID());
     }
 }
