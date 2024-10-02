@@ -19,3 +19,7 @@ done
 for file in testfiles/typeanalysis/*.out; do
     cp $file testfiles/typeanalysis/$(basename $file .out).expected
 done
+
+for file in testfiles/interpreter/*.out; do
+    cp $file testfiles/interpreter/$(basename $file .out).expected
+done
