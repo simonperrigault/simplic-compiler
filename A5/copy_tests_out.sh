@@ -23,3 +23,7 @@ done
 for file in testfiles/interpreter/*.out; do
     cp $file testfiles/interpreter/$(basename $file .out).expected
 done
+
+for file in testfiles/callgraph/*.out; do
+    cp $file testfiles/callgraph/$(basename $file .out).expected
+done

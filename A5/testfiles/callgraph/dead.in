@@ -1,0 +1,13 @@
+int dead() {
+    return 1;
+}
+
+int notdead() {
+    return 2;
+}
+
+int main() {
+    print(notdead());
+
+    return 0;
+}

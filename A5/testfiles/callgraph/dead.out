@@ -1,0 +1,7 @@
+digraph G {
+  main -> notdead;
+  main -> print;
+}
+dead can reach: { }
+notdead can reach: { }
+main can reach: { notdead print }
