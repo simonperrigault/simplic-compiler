@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 
 import lang.ast.Program;
 import lang.ast.ErrorMessage;
+import lang.ast.FuncDecl;
 import lang.ast.LangParser;
 import lang.ast.LangScanner;
+import lang.ast.IdUse;
 
 /**
  * Computes the maximum statement nesting depth for a Calc program.
@@ -43,6 +45,14 @@ public class Interpreter {
                 }
                 System.exit(1);
             }
+
+            System.out.println("digraph G {");
+            for (FuncDecl f : program.getFuncDeclList()) {
+                for (FuncDecl called : f.functionCalls()) {
+                    System.out.println("  "+ f.getFuncName().getID() + " -> " + called.getFuncName().getID() + ";");
+                }
+            }
+            System.out.println("}");
             program.eval();
             
         } catch (FileNotFoundException e) {

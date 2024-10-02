@@ -1,0 +1,6 @@
+digraph G {
+  fac -> fac;
+  f -> print;
+  f -> fac;
+  main -> f;
+}
