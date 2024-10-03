@@ -46,6 +46,14 @@ public class Compiler {
                 }
                 System.exit(1);
             }
+            // System.out.println("digraph G {");
+            // for (FuncDecl f : program.getFuncDeclList()) {
+            //     for (FuncDecl called : f.functionCalls()) {
+            //         System.out.println("  "+ f.getFuncName().getID() + " -> " + called.getFuncName().getID() + ";");
+            //     }
+            // }
+            // System.out.println("}");
+            program.eval();
             
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
