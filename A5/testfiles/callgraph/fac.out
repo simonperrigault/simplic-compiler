@@ -1,9 +1,9 @@
 digraph G {
   fac -> fac;
-  f -> fac;
   f -> print;
+  f -> fac;
   main -> f;
 }
 fac can reach: { fac }
-f can reach: { fac print }
-main can reach: { f fac print }
+f can reach: { print fac }
+main can reach: { print f fac }
