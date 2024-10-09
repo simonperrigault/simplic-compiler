@@ -7,7 +7,7 @@ aspect UniqueName {
 
     eq FuncDecl.getFuncName().uniqueName() = "0_" + getFuncName().getID();
     eq FuncDecl.getParamList(int i).uniqueName() = "0_" + getParamList(i).getID();
-    eq FuncDecl.getBlock().uniqueName() = "";
+    eq FuncDecl.getBlock().uniqueName() = getFuncName().getID() + "_";
     eq Block.getStmt(int i).uniqueName() = uniqueName() + i + "_";
     eq DeclStmt.getDecl(int i).uniqueName() = uniqueName() + getDecl(i).getIdDecl().getID();
 }

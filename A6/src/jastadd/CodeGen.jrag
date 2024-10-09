@@ -144,10 +144,83 @@ aspect CodeGen {
     public void FuncCallStmt.genCode(PrintStream out) {
         getFuncCall().genEval(out);
     }
+    public void IfStmt.genCode(PrintStream out) {
+        String elseLabel = uniqueName() + "else";
+        String endLabel = uniqueName() + "end";
+        getCondition().genConditionalJump(out, elseLabel);
+        getBlock().genCode(out);
+        out.println("        jmp " + endLabel);
+        out.println(elseLabel + ":");
+        if (hasElseBlock()) {
+            getElseBlock().genCode(out);
+        }
+        out.println(endLabel + ":");
+    }
+    public void WhileStmt.genCode(PrintStream out) {
+        String loopLabel = uniqueName() + "loop";
+        String endLabel = uniqueName() + "end";
+        out.println(loopLabel + ":");
+        getCondition().genConditionalJump(out, endLabel);
+        getBlock().genCode(out);
+        out.println("        jmp " + loopLabel);
+        out.println(endLabel + ":");
+    }
 
     public void Expr.genEval(PrintStream out) {
         out.println("        # genEval not implemented");
     }
+    public void Expr.genConditionalJump(PrintStream out, String label) {
+        out.println("        # genConditionalJump not implemented");
+    }
+    public void LtExpr.genConditionalJump(PrintStream out, String label) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        popq %rbx");
+        out.println("        cmpq %rax, %rbx");
+        out.println("        jge " + label);
+    }
+    public void LeExpr.genConditionalJump(PrintStream out, String label) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        popq %rbx");
+        out.println("        cmpq %rax, %rbx");
+        out.println("        jg " + label);
+    }
+    public void GtExpr.genConditionalJump(PrintStream out, String label) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        popq %rbx");
+        out.println("        cmpq %rax, %rbx");
+        out.println("        jle " + label);
+    }
+    public void GeExpr.genConditionalJump(PrintStream out, String label) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        popq %rbx");
+        out.println("        cmpq %rax, %rbx");
+        out.println("        jl " + label);
+    }
+    public void EqExpr.genConditionalJump(PrintStream out, String label) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        popq %rbx");
+        out.println("        cmpq %rax, %rbx");
+        out.println("        jne " + label);
+    }
+    public void NeqExpr.genConditionalJump(PrintStream out, String label) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        popq %rbx");
+        out.println("        cmpq %rax, %rbx");
+        out.println("        je " + label);
+    }
+
     public void AddExpr.genEval(PrintStream out) {
         getLeft().genEval(out);
         out.println("        pushq %rax");
