@@ -2,9 +2,14 @@ import java.util.HashSet;
 
 aspect CallGraph {
     inh FuncDecl FuncCall.enclosingFunction();
+    inh FuncDecl ReturnStmt.enclosingFunction();
 
     eq Program.getChild().enclosingFunction() = unknownFuncDecl();
     eq FuncDecl.getChild().enclosingFunction() = this;
+
+    public String FuncDecl.toString() {
+        return getFuncName().getID();
+    }
 
     coll Set<FuncDecl> FuncDecl.functionCalls() [new HashSet<FuncDecl>()] with add root FuncDecl;
 
