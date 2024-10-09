@@ -1,0 +1,21 @@
+int main() {
+    int a;
+    a = 3;
+    int b = a;
+}
+
+int b() {
+    int a;
+    int b;
+    main();
+    a = read();
+    print(a);
+    {
+        int a = b;
+    }
+}
+
+int c(int param) {
+    int a = param;
+    param = 12;
+}

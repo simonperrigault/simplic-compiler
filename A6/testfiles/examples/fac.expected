@@ -1,0 +1,9 @@
+digraph G {
+  fac -> fac;
+  f -> fac;
+  f -> print;
+  main -> f;
+}
+fac can reach: { fac }
+f can reach: { fac print }
+main can reach: { f fac print }

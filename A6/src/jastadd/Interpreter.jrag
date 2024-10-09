@@ -1,0 +1,168 @@
+import java.util.HashMap;
+import java.util.Scanner;
+
+aspect UniqueName {
+    inh String IdDecl.uniqueName();
+    inh String Stmt.uniqueName();
+
+    eq FuncDecl.getFuncName().uniqueName() = "0_" + getFuncName().getID();
+    eq FuncDecl.getParamList(int i).uniqueName() = "0_" + getParamList(i).getID();
+    eq FuncDecl.getBlock().uniqueName() = "";
+    eq Block.getStmt(int i).uniqueName() = uniqueName() + i + "_";
+    eq DeclStmt.getDecl(int i).uniqueName() = uniqueName() + getDecl(i).getIdDecl().getID();
+}
+
+aspect Interpreter {
+    public class ActivationRecord {
+        private HashMap<String, Integer> variables = new HashMap<String, Integer>();
+
+        public void put(String name, int value) {
+            variables.put(name, value);
+        }
+        public int get(String name) {
+            return variables.getOrDefault(name, 0);
+        }
+    }
+
+    private static Scanner FuncCall.scanner = new Scanner(System.in);
+
+
+    public void Program.eval() {
+        boolean mainFound = false;
+        for (FuncDecl func : getFuncDeclList()) {
+            if (func.getFuncName().getID().equals("main")) {
+                func.eval(new ActivationRecord());
+                mainFound = true;
+            }
+        }
+        if (!mainFound) {
+            throw new RuntimeException("No main function found");
+        }
+    }
+    public int FuncDecl.eval(ActivationRecord actrec) {
+        getBlock().eval(actrec);
+
+        return actrec.get("_return");
+    }
+
+    public void Stmt.eval(ActivationRecord actrec) {
+        throw new RuntimeException();
+    }
+    public void Block.eval(ActivationRecord actrec) {
+        for (Stmt stmt : getStmtList()) {
+            stmt.eval(actrec);
+            if (actrec.get("_mustReturn") == 2) {
+                return;
+            }
+        }
+    }
+    public void DeclStmt.eval(ActivationRecord actrec) {
+        for (Decl decl : getDeclList()) {
+            decl.eval(actrec);
+        }
+    }
+    public void FuncCallStmt.eval(ActivationRecord actrec) {
+        getFuncCall().eval(actrec);
+    }
+    public void AssignStmt.eval(ActivationRecord actrec) {
+        actrec.put(getIdUse().decl().uniqueName(), getExpr().eval(actrec));
+    }
+    public void IfStmt.eval(ActivationRecord actrec) {
+        if (getCondition().eval(actrec) == 1) {
+            getBlock().eval(actrec);
+        } else if (hasElseBlock()) {
+            getElseBlock().eval(actrec);
+        }
+    }
+    public void WhileStmt.eval(ActivationRecord actrec) {
+        while (getCondition().eval(actrec) == 1) {
+            getBlock().eval(actrec);
+            if (actrec.get("_mustReturn") == 2) {
+                return;
+            }
+        }
+    }
+    public void ReturnStmt.eval(ActivationRecord actrec) {
+        actrec.put("_return", getExpr().eval(actrec));
+        actrec.put("_mustReturn", 2);
+    }
+
+
+    public void Decl.eval(ActivationRecord actrec) {
+        if (hasExpr()) {
+            actrec.put(getIdDecl().uniqueName(), getExpr().eval(actrec));
+        }
+    }
+
+    public int Expr.eval(ActivationRecord actrec) {
+        throw new RuntimeException();
+    }
+
+    public int LtExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) < getRight().eval(actrec) ? 1 : 0;
+    }
+    public int LeExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) <= getRight().eval(actrec) ? 1 : 0;
+    }
+    public int GtExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) > getRight().eval(actrec) ? 1 : 0;
+    }
+    public int GeExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) >= getRight().eval(actrec) ? 1 : 0;
+    }
+    public int EqExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) == getRight().eval(actrec) ? 1 : 0;
+    }
+    public int NeqExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) != getRight().eval(actrec) ? 1 : 0;
+    }
+
+    public int AddExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) + getRight().eval(actrec);
+    }
+    public int SubExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) - getRight().eval(actrec);
+    }
+    public int MulExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) * getRight().eval(actrec);
+    }
+    public int DivExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) / getRight().eval(actrec);
+    }
+    public int ModExpr.eval(ActivationRecord actrec) {
+        return getLeft().eval(actrec) % getRight().eval(actrec);
+    }
+    public int OppExpr.eval(ActivationRecord actrec) {
+        return -getExpr().eval(actrec);
+    }
+    public int PrimaryExpr.eval(ActivationRecord actrec) {
+        return getExpr().eval(actrec);
+    }
+    public int Numeral.eval(ActivationRecord actrec) {
+        return Integer.parseInt(getNUMERAL());
+    }
+    public int FuncCall.eval(ActivationRecord actrec) {
+        if (getFuncName().getID().equals("print")) {
+            System.out.println(getParamList(0).eval(actrec));
+            return 0;
+        }
+        if (getFuncName().getID().equals("read")) {
+            try {
+                return scanner.nextInt();
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+
+        ActivationRecord newActrec = new ActivationRecord();
+        for (int i = 0; i < getNumParamList(); i++) {
+            newActrec.put(getFuncName().function().getParamList(i).uniqueName(), getParamList(i).eval(actrec));
+        }
+        newActrec.put("_mustReturn", 1);
+        getFuncName().function().getBlock().eval(newActrec);
+        return newActrec.get("_return");
+    }
+    public int IdUse.eval(ActivationRecord actrec) {
+        return actrec.get(decl().uniqueName());
+    }
+}

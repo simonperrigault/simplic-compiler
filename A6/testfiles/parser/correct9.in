@@ -1,0 +1,15 @@
+int main() {
+    // comment
+    /* multi 
+    line
+comment 
+    */
+    // don't parse
+    /* 
+    if (x == 0) {
+
+    } */
+
+
+    return 0;
+}

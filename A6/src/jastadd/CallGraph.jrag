@@ -1,0 +1,24 @@
+import java.util.HashSet;
+
+aspect CallGraph {
+    inh FuncDecl FuncCall.enclosingFunction();
+
+    eq Program.getChild().enclosingFunction() = unknownFuncDecl();
+    eq FuncDecl.getChild().enclosingFunction() = this;
+
+    coll Set<FuncDecl> FuncDecl.functionCalls() [new HashSet<FuncDecl>()] with add root FuncDecl;
+
+    FuncCall contributes getFuncName().function()
+        to FuncDecl.functionCalls() for enclosingFunction();
+}
+
+aspect Reachability {
+    syn Set<FuncDecl> FuncDecl.reachable() circular [new HashSet<FuncDecl>()] {
+        HashSet<FuncDecl> result = new HashSet<FuncDecl>();
+        result.addAll(functionCalls());
+        for (FuncDecl s : functionCalls()) {
+            result.addAll(s.reachable());
+        }
+        return result;
+    }
+}
