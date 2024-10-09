@@ -128,7 +128,9 @@ aspect CodeGen {
         out.println("        ret");
     }
 
-    public void Stmt.genCode(PrintStream out) { }
+    public void Stmt.genCode(PrintStream out) {
+        out.println("        # genCode not implemented");
+    }
     public void Block.genCode(PrintStream out) {
         for (Stmt stmt: getStmtList()) {
             stmt.genCode(out);
@@ -143,11 +145,67 @@ aspect CodeGen {
         getFuncCall().genEval(out);
     }
 
-    public void Expr.genEval(PrintStream out) { }
-    public void Numeral.genVal(PrintStream out) {
+    public void Expr.genEval(PrintStream out) {
+        out.println("        # genEval not implemented");
+    }
+    public void AddExpr.genEval(PrintStream out) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        movq %rax, %rbx");
+        out.println("        popq %rax");
+        out.println("        addq %rbx, %rax");
+    }
+    public void SubExpr.genEval(PrintStream out) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        movq %rax, %rbx");
+        out.println("        popq %rax");
+        out.println("        subq %rbx, %rax");
+    }
+    public void MulExpr.genEval(PrintStream out) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        movq %rax, %rbx");
+        out.println("        popq %rax");
+        out.println("        imulq %rbx, %rax");
+    }
+    public void DivExpr.genEval(PrintStream out) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        movq %rax, %rbx");
+        out.println("        popq %rax");
+        out.println("        cqo");        // NB: sign extend RAX to RDX to prepare for idiv
+        out.println("        idivq %rbx");
+    }
+    public void ModExpr.genEval(PrintStream out) {
+        getLeft().genEval(out);
+        out.println("        pushq %rax");
+        getRight().genEval(out);
+        out.println("        movq %rax, %rbx");
+        out.println("        popq %rax");
+        out.println("        cqo");        // NB: sign extend RAX to RDX to prepare for idiv
+        out.println("        idivq %rbx");
+        out.println("        movq %rdx, %rax");
+    }
+    public void OppExpr.genEval(PrintStream out) {
+        getExpr().genEval(out);
+        out.println("        negq %rax");
+    }
+    public void PrimaryExpr.genEval(PrintStream out) {
+        getExpr().genEval(out);
+    }
+    public void Numeral.genEval(PrintStream out) {
         out.println("        movq $" + getNUMERAL() + ", %rax");
     }
     public void FuncCall.genEval(PrintStream out) {
+        for (int i = getNumParamList() - 1; i >= 0; i--) {
+            getParamList(i).genEval(out);
+            out.println("        pushq %rax");
+        }
         out.println("        call " + getFuncName().function().toString());
     }
 }
