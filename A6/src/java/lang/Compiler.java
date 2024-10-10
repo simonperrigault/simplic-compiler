@@ -53,7 +53,8 @@ public class Compiler {
             //     }
             // }
             // System.out.println("}");
-            program.eval();
+            // program.eval();
+            program.genCode(System.out);
             
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");

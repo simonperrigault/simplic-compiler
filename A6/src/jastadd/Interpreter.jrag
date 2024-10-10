@@ -5,6 +5,7 @@ aspect UniqueName {
     inh String IdDecl.uniqueName();
     inh String Stmt.uniqueName();
 
+    eq Program.getChild().uniqueName() = "";
     eq FuncDecl.getFuncName().uniqueName() = "0_" + getFuncName().getID();
     eq FuncDecl.getParamList(int i).uniqueName() = "0_" + getParamList(i).getID();
     eq FuncDecl.getBlock().uniqueName() = getFuncName().getID() + "_";

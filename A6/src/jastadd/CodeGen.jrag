@@ -118,7 +118,7 @@ aspect CodeGen {
         out.println(toString() + ":");
         out.println("        pushq %rbp");
         out.println("        movq %rsp, %rbp");
-        // out.println("        subq $" + (numLocals()*8) + ", %rsp");
+        out.println("        subq $" + (numLocals()*8) + ", %rsp");
 
         getBlock().genCode(out);
 
@@ -165,12 +165,27 @@ aspect CodeGen {
         out.println("        jmp " + loopLabel);
         out.println(endLabel + ":");
     }
+    public void DeclStmt.genCode(PrintStream out) {
+        for (Decl decl: getDeclList()) {
+            decl.genCode(out);
+        }
+    }
+    public void Decl.genCode(PrintStream out) {
+        if (hasExpr()) {
+            getExpr().genEval(out);
+            out.println("        movq %rax, " + getIdDecl().address());
+        }
+    }
+    public void AssignStmt.genCode(PrintStream out) {
+        getExpr().genEval(out);
+        out.println("        movq %rax, " + getIdUse().decl().address());
+    }
 
     public void Expr.genEval(PrintStream out) {
-        out.println("        # genEval not implemented");
+        throw new UnsupportedOperationException("genEval not implemented");
     }
     public void Expr.genConditionalJump(PrintStream out, String label) {
-        out.println("        # genConditionalJump not implemented");
+        throw new UnsupportedOperationException("genConditionalJump not implemented");
     }
     public void LtExpr.genConditionalJump(PrintStream out, String label) {
         getLeft().genEval(out);
@@ -280,5 +295,32 @@ aspect CodeGen {
             out.println("        pushq %rax");
         }
         out.println("        call " + getFuncName().function().toString());
+        out.println("        addq $" + (8*getNumParamList()) + ", %rsp");
     }
+    public void IdUse.genEval(PrintStream out) {
+        out.println("        movq " + decl().address() + ", %rax");
+    }
+}
+
+aspect VariableAddress {
+    inh String IdDecl.address();
+
+    eq FuncDecl.getParamList(int i).address() {
+        return (i+2)*8 + "(%rbp)";
+    }
+    eq Decl.getIdDecl().address() {
+        return -(getIdDecl().locIndex())*8 + "(%rbp)";
+    }
+
+    inh ASTNode ASTNode.prev();
+    eq ASTNode.getChild(int i).prev() = prev(i);
+    syn ASTNode ASTNode.prev(int i) = i == 0 ? this : getChild(i-1).last();
+    syn ASTNode ASTNode.last() = prev(getNumChild());
+
+    syn int ASTNode.locIndex() = prev().locIndex();
+    eq Program.locIndex() = 0;
+    eq FuncDecl.locIndex() = 0;
+    eq IdDecl.locIndex() = prev().locIndex() + 1;
+
+    syn int FuncDecl.numLocals() = last().locIndex();
 }
