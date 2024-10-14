@@ -320,7 +320,7 @@ aspect VariableAddress {
     syn int ASTNode.locIndex() = prev().locIndex();
     eq Program.locIndex() = 0;
     eq FuncDecl.locIndex() = 0;
-    eq IdDecl.locIndex() = prev().locIndex() + 1;
+    eq Decl.locIndex() = prev().locIndex() + 1;
 
     syn int FuncDecl.numLocals() = last().locIndex();
 }
